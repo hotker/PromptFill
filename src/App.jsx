@@ -167,6 +167,54 @@ const CATEGORY_STYLES = {
     badgeText: "text-slate-700", badgeBg: "bg-slate-100",
     dotBg: "bg-slate-500", btnBg: "bg-slate-600",
     inputRing: "focus:ring-slate-200", inputBorder: "focus:border-slate-500"
+  },
+  orange: {
+    text: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200",
+    hoverBg: "hover:bg-orange-100", hoverBorder: "hover:border-orange-300",
+    ring: "ring-orange-300", bgActive: "bg-orange-100",
+    badgeText: "text-orange-700", badgeBg: "bg-orange-100",
+    dotBg: "bg-orange-500", btnBg: "bg-orange-600",
+    inputRing: "focus:ring-orange-200", inputBorder: "focus:border-orange-500"
+  },
+  cyan: {
+    text: "text-cyan-600", bg: "bg-cyan-50", border: "border-cyan-200",
+    hoverBg: "hover:bg-cyan-100", hoverBorder: "hover:border-cyan-300",
+    ring: "ring-cyan-300", bgActive: "bg-cyan-100",
+    badgeText: "text-cyan-700", badgeBg: "bg-cyan-100",
+    dotBg: "bg-cyan-500", btnBg: "bg-cyan-600",
+    inputRing: "focus:ring-cyan-200", inputBorder: "focus:border-cyan-500"
+  },
+  lime: {
+    text: "text-lime-600", bg: "bg-lime-50", border: "border-lime-200",
+    hoverBg: "hover:bg-lime-100", hoverBorder: "hover:border-lime-300",
+    ring: "ring-lime-300", bgActive: "bg-lime-100",
+    badgeText: "text-lime-700", badgeBg: "bg-lime-100",
+    dotBg: "bg-lime-500", btnBg: "bg-lime-600",
+    inputRing: "focus:ring-lime-200", inputBorder: "focus:border-lime-500"
+  },
+  pink: {
+    text: "text-pink-600", bg: "bg-pink-50", border: "border-pink-200",
+    hoverBg: "hover:bg-pink-100", hoverBorder: "hover:border-pink-300",
+    ring: "ring-pink-300", bgActive: "bg-pink-100",
+    badgeText: "text-pink-700", badgeBg: "bg-pink-100",
+    dotBg: "bg-pink-500", btnBg: "bg-pink-600",
+    inputRing: "focus:ring-pink-200", inputBorder: "focus:border-pink-500"
+  },
+  indigo: {
+    text: "text-indigo-600", bg: "bg-indigo-50", border: "border-indigo-200",
+    hoverBg: "hover:bg-indigo-100", hoverBorder: "hover:border-indigo-300",
+    ring: "ring-indigo-300", bgActive: "bg-indigo-100",
+    badgeText: "text-indigo-700", badgeBg: "bg-indigo-100",
+    dotBg: "bg-indigo-500", btnBg: "bg-indigo-600",
+    inputRing: "focus:ring-indigo-200", inputBorder: "focus:border-indigo-500"
+  },
+  teal: {
+    text: "text-teal-600", bg: "bg-teal-50", border: "border-teal-200",
+    hoverBg: "hover:bg-teal-100", hoverBorder: "hover:border-teal-300",
+    ring: "ring-teal-300", bgActive: "bg-teal-100",
+    badgeText: "text-teal-700", badgeBg: "bg-teal-100",
+    dotBg: "bg-teal-500", btnBg: "bg-teal-600",
+    inputRing: "focus:ring-teal-200", inputBorder: "focus:border-teal-500"
   }
 };
 
@@ -1449,10 +1497,11 @@ const App = () => {
             </div>
             <button 
                 onClick={() => setIsCategoryManagerOpen(true)}
-                className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors text-xs font-medium"
                 title={t('manage_categories')}
             >
-                <List size={18} />
+                <List size={14} />
+                {t('manage_categories')}
             </button>
           </div>
           <p className="text-xs text-gray-500">{t('bank_subtitle')}</p>
@@ -1460,10 +1509,10 @@ const App = () => {
 
         <div className="flex-1 overflow-y-auto p-4 pb-20">
           <div 
-            className="block"
+            className="grid items-start"
             style={{ 
-                columnWidth: '210px', 
-                columnGap: '12px'
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                gap: '16px'
             }}
           >
             {/* Render grouped banks */}
