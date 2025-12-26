@@ -725,6 +725,17 @@ export const INITIAL_BANKS = {
       { cn: "椰子", en: "Coconut" }
     ]
   },
+  xmas_theme: {
+    label: { cn: "圣诞主题", en: "Christmas Theme" },
+    category: "other",
+    options: [
+      { cn: "抽象圣诞树", en: "an abstract Christmas Tree" },
+      { cn: "圣诞雪花", en: "Christmas snowflake" },
+      { cn: "驯鹿与森林", en: "Reindeer and forest" },
+      { cn: "圣诞装饰球", en: "Christmas ornaments" },
+      { cn: "圣诞姜饼屋", en: "Christmas gingerbread house" }
+    ]
+  },
   jewelry_style: {
     label: { cn: "珠宝样式", en: "Jewelry Style" },
     category: "item",
@@ -885,6 +896,7 @@ export const INITIAL_DEFAULTS = {
   show_name: { cn: "龙猫", en: "My Neighbor Totoro" },
   character_name: { cn: "龙猫", en: "Totoro" },
   fruit: { cn: "柠檬", en: "Lemon" },
+  xmas_theme: { cn: "抽象圣诞树", en: "an abstract Christmas Tree" },
   jewelry_style: { cn: "精美的金色背链", en: "Fine gold back necklace" },
   flower_type: { cn: "一束深红色玫瑰", en: "A bouquet of deep red roses" },
   character_type_pixar: { cn: "单人角色：聚焦于个人生活方式", en: "Single: Focus on personal lifestyle" },

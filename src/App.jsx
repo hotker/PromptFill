@@ -12,7 +12,7 @@ import { PREMIUM_STYLES, CATEGORY_STYLES, TAG_STYLES, TAG_LABELS } from './const
 import { MASONRY_STYLES } from './constants/masonryStyles';
 
 // ====== 导入工具函数 ======
-import { deepClone, makeUniqueKey, waitForImageLoad, getLocalized } from './utils/helpers';
+import { deepClone, makeUniqueKey, waitForImageLoad, getLocalized, getSystemLanguage } from './utils/helpers';
 import { mergeTemplatesWithSystem, mergeBanksWithSystem } from './utils/merge';
 import { SCENE_WORDS, STYLE_WORDS } from './constants/slogan';
 
@@ -586,7 +586,7 @@ const MobileAnimatedSlogan = React.memo(({ isActive, language, isDarkMode }) => 
 
 const App = () => {
   // 当前应用代码版本 (必须与 package.json 和 version.json 一致)
-  const APP_VERSION = "0.6.1";
+  const APP_VERSION = "0.6.2";
 
   // 临时功能：瀑布流样式管理
   const [masonryStyleKey, setMasonryStyleKey] = useState('poster');
@@ -597,8 +597,8 @@ const App = () => {
   // bump version keys to强制刷新新增词库与默认值
   const [banks, setBanks] = useStickyState(INITIAL_BANKS, "app_banks_v9");
   const [defaults, setDefaults] = useStickyState(INITIAL_DEFAULTS, "app_defaults_v9");
-  const [language, setLanguage] = useStickyState("cn", "app_language_v1"); // 全局UI语言
-  const [templateLanguage, setTemplateLanguage] = useStickyState("cn", "app_template_language_v1"); // 模板内容语言
+  const [language, setLanguage] = useStickyState(getSystemLanguage(), "app_language_v1"); // 全局UI语言
+  const [templateLanguage, setTemplateLanguage] = useStickyState(getSystemLanguage(), "app_template_language_v1"); // 模板内容语言
   const [categories, setCategories] = useStickyState(INITIAL_CATEGORIES, "app_categories_v1"); // New state
   
   const [templates, setTemplates] = useStickyState(INITIAL_TEMPLATES_CONFIG, "app_templates_v10");

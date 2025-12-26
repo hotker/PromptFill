@@ -32,7 +32,38 @@
 /**
  * 模板系统版本号，每次更新 templates.js 或 banks.js 时请更新此版本号
  */
-export const SYSTEM_DATA_VERSION = "0.7.3";
+export const SYSTEM_DATA_VERSION = "0.7.4";
+
+export const TEMPLATE_WOODEN_ART_XMAS = {
+  cn: `### 激光切割木质层叠艺术 (Wood Art & Xmas)
+一件通过激光切割工艺制作的、细节丰富的多层木质艺术品插画。
+
+**视觉风格:**
+- **工艺:** 激光切割木质面板艺术，包含大量精细的层叠结构。
+- **艺术风格:** 抽象艺术，每一层都拥有不同的互补色彩。
+- **主题:** 艺术品主题为 {{xmas_theme}}，融合了几何图形与丰富的材质纹理，展现大师级水准。
+
+**摄影与呈现:**
+- **风格:** 顶级产品促销摄影风格，强调深度感与木质纤维的真实触感。
+- **美学:** 专业的商业摄影构图，利用光影勾勒出每一层木板的边缘，画面干净且极具格调。
+
+**规格:**
+- **画幅:** {{ratio}}`,
+  en: `### Wood Art & Xmas (Laser-Cut Layered Art)
+A beautiful, detailed illustration of multi-layered wooden art created by laser cutting techniques.
+
+**Visual Style:**
+- **Technique:** Laser-cut wooden panel art with numerous intricate layers and precise craftsmanship.
+- **Art Style:** Abstract art where each layer features a distinct, complementary color.
+- **Theme:** The artwork theme is {{xmas_theme}}, integrating geometric shapes and rich textures, showcasing maestro-level artistry.
+
+**Photography & Presentation:**
+- **Style:** Top-tier product promotion photography, emphasizing depth and the authentic tactile quality of wood.
+- **Aesthetics:** Professional commercial photography composition, using light and shadow to define the edges of each wooden layer, resulting in a clean and highly stylish image.
+
+**Specifications:**
+- **Ratio:** {{ratio}}`
+};
 
 export const DEFAULT_TEMPLATE_CONTENT = {
   cn: `### Role (角色设定)
@@ -588,7 +619,7 @@ export const TEMPLATE_JAPANESE_PRODUCT_POSTER = {
 **中央（画布30%）：**
 - **大量白色负空间（间 - Ma）**
 - **极简几何元素：** 精致的细线
-- **浮动文字：** "自然な素材"（天然材料）
+- **浮动文字：** "天然な素材"（天然材料）
 - **极简品牌标识**
 - **背景中非常微妙的{{fruit_1}}特征纹理图案（低不透明度）**
 
@@ -1093,6 +1124,19 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
+    language: ["cn", "en"]
+  },
+  {
+    id: "tpl_wooden_art_xmas",
+    name: { cn: "木质层叠艺术", en: "Layered Wood Art" },
+    content: TEMPLATE_WOODEN_ART_XMAS,
+    imageUrl: "https://s3.bmp.ovh/imgs/2025/12/26/3170b82b79a7801e.jpeg",
+    author: "@tanshilong(MarioTan)",
+    selections: {
+      "xmas_theme": { cn: "抽象圣诞树", en: "an abstract Christmas Tree" },
+      "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
+    },
+    tags: ["产品", "创意", "摄影"],
     language: ["cn", "en"]
   }
 ];

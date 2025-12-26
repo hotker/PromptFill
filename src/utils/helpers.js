@@ -21,6 +21,13 @@ export const getLocalized = (obj, language) => {
   return obj[language] || obj.cn || obj.en || "";
 };
 
+// 获取系统语言 (非中文环境默认返回 en)
+export const getSystemLanguage = () => {
+  if (typeof window === 'undefined') return 'cn';
+  const lang = (navigator.language || navigator.languages?.[0] || 'zh-CN').toLowerCase();
+  return lang.startsWith('zh') ? 'cn' : 'en';
+};
+
 // 等待图片加载完成，避免导出时空白
 export const waitForImageLoad = (img, timeout = 6000) => {
   if (!img) return Promise.resolve();
