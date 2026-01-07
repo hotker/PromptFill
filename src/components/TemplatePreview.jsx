@@ -281,7 +281,7 @@ export const TemplatePreview = React.memo(({
         <div className="w-full h-full overflow-y-auto px-3 py-4 md:px-4 lg:p-8 custom-scrollbar relative z-10">
             <div 
                 id="preview-card"
-                className={`max-w-4xl mx-auto p-4 sm:p-6 md:p-8 lg:p-12 min-h-[500px] md:min-h-[600px] transition-all duration-500 relative ${isMobile ? (isDarkMode ? 'bg-[#242120]/90 border border-white/5 rounded-2xl shadow-2xl' : 'bg-white/90 border border-white/60 rounded-2xl shadow-xl') : (isDarkMode ? 'bg-black/20 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl' : 'bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm')}`}
+                className={`max-w-4xl mx-auto p-4 sm:p-6 md:p-8 lg:p-12 min-h-[500px] md:min-h-[600px] transition-all duration-500 relative ${isMobile ? (isDarkMode ? 'bg-[#242120]/90 border border-white/5 rounded-2xl shadow-2xl overflow-visible' : 'bg-white/90 border border-white/60 rounded-2xl shadow-xl overflow-visible') : (isDarkMode ? 'bg-black/20 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl' : 'bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm')}`}
             >
                 {/* --- Top Section: Title & Image --- */}
                 {isEditing && (
