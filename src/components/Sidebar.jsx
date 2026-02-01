@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { GithubIcon } from './icons/GithubIcon';
 import { HomeIcon } from './icons/HomeIcon';
 import { ListIcon } from './icons/ListIcon';
@@ -20,7 +21,6 @@ export const Sidebar = ({
   activeTab = 'home', // 'home' | 'details' | 'settings'
   onHome,
   onDetail,
-  onSettings,
   // Sort props
   isSortMenuOpen,
   setIsSortMenuOpen,
@@ -75,21 +75,39 @@ export const Sidebar = ({
         {/* 导航按钮组 */}
         <div className="flex flex-col items-center gap-6">
           <Tooltip content="主页" isDarkMode={isDarkMode}>
-            <button 
-              onClick={onHome}
-              className={`p-2 group transition-colors ${activeTab === 'home' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
-            >
-              <HomeIcon size={24} />
-            </button>
+            {activeTab === 'settings' ? (
+              <Link
+                to="/"
+                className={`p-2 group transition-colors block ${activeTab === 'home' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
+              >
+                <HomeIcon size={24} />
+              </Link>
+            ) : (
+              <button
+                onClick={onHome}
+                className={`p-2 group transition-colors ${activeTab === 'home' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
+              >
+                <HomeIcon size={24} />
+              </button>
+            )}
           </Tooltip>
-          
+
           <Tooltip content="详情页" isDarkMode={isDarkMode}>
-            <button 
-              onClick={onDetail}
-              className={`p-2 group transition-colors ${activeTab === 'details' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
-            >
-              <ListIcon size={24} />
-            </button>
+            {activeTab === 'settings' ? (
+              <Link
+                to="/"
+                className={`p-2 group transition-colors block ${activeTab === 'details' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
+              >
+                <ListIcon size={24} />
+              </Link>
+            ) : (
+              <button
+                onClick={onDetail}
+                className={`p-2 group transition-colors ${activeTab === 'details' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
+              >
+                <ListIcon size={24} />
+              </button>
+            )}
           </Tooltip>
           
           <div className="relative">
@@ -167,16 +185,16 @@ export const Sidebar = ({
             )}
           </button>
         </Tooltip>
-        
+
         <Tooltip content={t('settings')} isDarkMode={isDarkMode}>
-          <button 
-            onClick={onSettings}
-            className={`p-2 group transition-colors ${activeTab === 'settings' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
+          <Link
+            to="/setting"
+            className={`p-2 group transition-colors block ${activeTab === 'settings' ? (isDarkMode ? 'text-[#FB923C]' : 'text-[#EA580C]') : (isDarkMode ? 'text-[#8E9196]' : 'text-[#6B7280]')} hover:text-[#F97316]`}
           >
             <SettingsIcon size={24} />
-          </button>
+          </Link>
         </Tooltip>
-        
+
         <Tooltip content="Github" isDarkMode={isDarkMode}>
           <a
             href="https://github.com/TanShilongMario/PromptFill/"

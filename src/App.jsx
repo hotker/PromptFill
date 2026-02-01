@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { Copy, Plus, X, Settings, Check, Edit3, Eye, Trash2, FileText, Pencil, Copy as CopyIcon, Globe, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, GripVertical, Download, Upload, Image as ImageIcon, List, Undo, Redo, Maximize2, RotateCcw, LayoutGrid, Search, ArrowRight, ArrowUpRight, ArrowUpDown, RefreshCw, Sparkles, Sun, Moon, ExternalLink } from 'lucide-react';
 import { WaypointsIcon } from './components/icons/WaypointsIcon';
@@ -18,6 +19,7 @@ import { SMART_SPLIT_CONFIRM_MESSAGE, SMART_SPLIT_CONFIRM_TITLE, SMART_SPLIT_BUT
 import { deepClone, makeUniqueKey, waitForImageLoad, getLocalized, getSystemLanguage, compressTemplate, decompressTemplate, copyToClipboard, saveDirectoryHandle } from './utils';
 import { mergeTemplatesWithSystem, mergeBanksWithSystem } from './utils/merge';
 import { generateAITerms, polishAndSplitPrompt } from './utils/aiService';  // AI 服务
+import { uploadToICloud, downloadFromICloud } from './utils/icloud'; // iCloud 服务
 
 // ====== 导入自定义 Hooks ======
 import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups, useShareFunctions, useTemplateManagement, useServiceWorker } from './hooks';
@@ -26,7 +28,7 @@ import { useStickyState, useAsyncStickyState, useEditorHistory, useLinkageGroups
 import { Variable, VisualEditor, PremiumButton, EditorToolbar, Lightbox, TemplatePreview, TemplateEditor, TemplatesSidebar, BanksSidebar, InsertVariableModal, AddBankModal, DiscoveryView, MobileSettingsView, SettingsView, Sidebar, TagSidebar } from './components';
 import { ImagePreviewModal, AnimatedSlogan, MobileAnimatedSlogan } from './components/preview';
 import { MobileBottomNav } from './components/mobile';
-import { ShareOptionsModal, ImportTokenModal, ShareImportModal, CategoryManagerModal, ConfirmModal } from './components/modals';
+import { ShareOptionsModal, CopySuccessModal, ImportTokenModal, ShareImportModal, CategoryManagerModal, ConfirmModal } from './components/modals';
 import { DataUpdateNotice, AppUpdateNotice } from './components/notifications';
 
 
@@ -39,8 +41,12 @@ import { DataUpdateNotice, AppUpdateNotice } from './components/notifications';
 // Poster View Animated Slogan Constants - 已移至 constants/slogan.js
 
 const App = () => {
+  // 获取当前路由
+  const location = useLocation();
+  const isSettingPage = location.pathname === '/setting';
+
   // 当前应用代码版本 (必须与 package.json 和 version.json 一致)
-  const APP_VERSION = "0.8.1";
+  const APP_VERSION = "0.8.2";
 
   // 临时功能：瀑布流样式管理
   const [masonryStyleKey, setMasonryStyleKey] = useState('poster');
@@ -74,6 +80,11 @@ const App = () => {
   const activeTemplate = useMemo(() => {
     return templates.find(t => t.id === activeTemplateId) || templates[0];
   }, [templates, activeTemplateId]);
+
+  const userTemplates = useMemo(() => {
+    const systemTemplateIds = new Set(INITIAL_TEMPLATES_CONFIG.map(t => t.id));
+    return templates.filter(t => !systemTemplateIds.has(t.id));
+  }, [templates]);
   
   const [lastAppliedDataVersion, setLastAppliedDataVersion] = useStickyState("", "app_data_version_v1");
   const [themeMode, setThemeMode] = useStickyState("system", "app_theme_mode_v1");
@@ -123,10 +134,76 @@ const App = () => {
   // UI State
   const [bankSidebarWidth, setBankSidebarWidth] = useStickyState(300, "app_bank_sidebar_width_v1"); // Default width reduced to 300px for more editor space
   const [isResizing, setIsResizing] = useState(false);
+  const [iCloudEnabled, setICloudEnabled] = useStickyState(false, "app_icloud_sync_v1");
+  const [isICloudSyncing, setIsICloudSyncing] = useState(false);
+  const [lastICloudSyncAt, setLastICloudSyncAt] = useStickyState(0, "app_last_icloud_sync");
+  const [lastICloudSyncError, setLastICloudSyncError] = useState("");
   
+  // ====== iCloud 自动同步逻辑 ======
+  // 1. 数据变更自动上传
+  useEffect(() => {
+    if (iCloudEnabled && isTemplatesLoaded && isBanksLoaded && isCategoriesLoaded && isDefaultsLoaded) {
+      const syncTimer = setTimeout(async () => {
+        const result = await uploadToICloud({
+          templates,
+          banks,
+          categories,
+          defaults,
+          lastAppliedDataVersion
+        });
+        if (result?.ok) {
+          setLastICloudSyncAt(result.timestamp);
+          setLastICloudSyncError("");
+        } else if (result?.error) {
+          setLastICloudSyncError(result.error);
+        }
+      }, 2000); // 延迟2秒同步，避免频繁操作导致压力
+      return () => clearTimeout(syncTimer);
+    }
+  }, [iCloudEnabled, templates, banks, categories, defaults, lastAppliedDataVersion, isTemplatesLoaded, isBanksLoaded, isCategoriesLoaded, isDefaultsLoaded]);
+
+  // 2. 启动时检查云端数据
+  useEffect(() => {
+    const checkICloudUpdate = async () => {
+      if (iCloudEnabled && isTemplatesLoaded && isBanksLoaded && isCategoriesLoaded && isDefaultsLoaded) {
+        setIsICloudSyncing(true);
+        const cloudData = await downloadFromICloud();
+        setIsICloudSyncing(false);
+        
+        if (cloudData && cloudData.payload) {
+          const { timestamp, payload } = cloudData;
+          // 这里的逻辑可以根据你的需求调整：是直接覆盖，还是弹出提示？
+          // 为了安全起见，我们暂且只在控制台输出，或者你可以添加一个“发现云端数据”的提示
+          console.log('[iCloud] 发现云端数据，时间戳:', new Date(timestamp).toLocaleString());
+          
+          // 如果云端数据比本地新（这里需要更复杂的逻辑，比如存一个本地时间戳）
+          // 或者如果本地是空的（刚安装 App），则直接加载
+          const lastLocalSync = lastICloudSyncAt || 0;
+          if (timestamp > lastLocalSync || templates.length <= INITIAL_TEMPLATES_CONFIG.length) {
+            if (window.confirm(language === 'cn' ? '发现更新的 iCloud 云端备份，是否恢复数据？' : 'Found newer iCloud backup, restore data?')) {
+              if (payload.templates) setTemplates(payload.templates);
+              if (payload.banks) setBanks(payload.banks);
+              if (payload.categories) setCategories(payload.categories);
+              if (payload.defaults) setDefaults(payload.defaults);
+              setLastICloudSyncAt(timestamp);
+            }
+          }
+        }
+      }
+    };
+    checkICloudUpdate();
+  }, [iCloudEnabled, isTemplatesLoaded, isBanksLoaded, isCategoriesLoaded, isDefaultsLoaded, lastICloudSyncAt]);
+
   // 检测是否为移动设备
   const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
   const [mobileTab, setMobileTab] = useState(isMobileDevice ? "home" : "editor"); // 'home', 'editor', 'settings'
+
+  // 路由同步 mobileTab
+  useEffect(() => {
+    if (isSettingPage && isMobileDevice) {
+      setMobileTab('settings');
+    }
+  }, [isSettingPage, isMobileDevice]);
   const [isTemplatesDrawerOpen, setIsTemplatesDrawerOpen] = useState(false);
   const [isBanksDrawerOpen, setIsBanksDrawerOpen] = useState(false);
   const [touchDraggingVar, setTouchDraggingVar] = useState(null); // { key, x, y } 用于移动端模拟拖拽
@@ -138,7 +215,14 @@ const App = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false); // New UI state
   const [isInsertModalOpen, setIsInsertModalOpen] = useState(false); // New UI state for Insert Picker
+  const [isCopySuccessModalOpen, setIsCopySuccessModalOpen] = useState(false); // New UI state for Copy Success
   const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false); // New UI state for Lightbox
+  const [deleteTemplateTargetId, setDeleteTemplateTargetId] = useState(null);
+  const [isDeleteTemplateConfirmOpen, setIsDeleteTemplateConfirmOpen] = useState(false);
+  const [actionConfirm, setActionConfirm] = useState(null);
+  const [noticeMessage, setNoticeMessage] = useState(null);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [selectedExportTemplateIds, setSelectedExportTemplateIds] = useState([]);
   
   // 新增：图片 Base64 缓存，用于解决导出时的跨域和稳定性问题
   const imageBase64Cache = useRef({});
@@ -153,6 +237,27 @@ const App = () => {
   const [editingTemplateNameId, setEditingTemplateNameId] = useState(null);
   const [tempTemplateName, setTempTemplateName] = useState("");
   const [tempTemplateAuthor, setTempTemplateAuthor] = useState("");
+  const [tempTemplateBestModel, setTempTemplateBestModel] = useState("");
+  const [tempTemplateBaseImage, setTempTemplateBaseImage] = useState("");
+
+  // 监听 activeTemplate 变化，同步更新模板基础信息（用于已有模板的兼容性初始化）
+  React.useEffect(() => {
+    if (activeTemplate) {
+      // 如果模板缺少这些属性，我们在这里做一次静默初始化（仅针对内存中的状态）
+      // 实际保存会在用户操作或切换时发生
+      if (!activeTemplate.bestModel) {
+        setTempTemplateBestModel("Nano Banana Pro");
+      } else {
+        setTempTemplateBestModel(activeTemplate.bestModel);
+      }
+      
+      if (!activeTemplate.baseImage) {
+        setTempTemplateBaseImage("optional_base_image");
+      } else {
+        setTempTemplateBaseImage(activeTemplate.baseImage);
+      }
+    }
+  }, [activeTemplate?.id]);
   const [zoomedImage, setZoomedImage] = useState(null);
   // 移除这一行，将状态移入独立的 Modal 组件
   // const [modalMousePos, setModalMousePos] = useState({ x: 0, y: 0 });
@@ -177,17 +282,17 @@ const App = () => {
   const [isDiscoveryView, setDiscoveryView] = useState(true); // 首次加载默认显示发现（海报）视图
   
   // 统一的发现页切换处理器
-  const handleSetDiscoveryView = React.useCallback((val) => {
+  const handleSetDiscoveryView = React.useCallback((val, options = {}) => {
+    const { skipMobileTabSync = false } = options;
     setDiscoveryView(val);
     // 移动端：侧边栏里的“回到发现页”按钮需要同步切回 mobileTab
-    if (isMobileDevice && val) {
+    if (!skipMobileTabSync && isMobileDevice && val) {
       setMobileTab('home');
-    } else if (isMobileDevice && !val && mobileTab === 'home') {
+    } else if (!skipMobileTabSync && isMobileDevice && !val && mobileTab === 'home') {
       setMobileTab('editor');
     }
   }, [isMobileDevice, mobileTab]);
-  
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   const [isPosterAutoScrollPaused, setIsPosterAutoScrollPaused] = useState(false);
   const posterScrollRef = useRef(null);
   const popoverRef = useRef(null);
@@ -226,7 +331,7 @@ const App = () => {
     setLampRotation(rotation);
     setIsLampHovered(true);
   };
-  
+
   const [updateNoticeType, setUpdateNoticeType] = useState(null); // 'app' | 'data' | null
 
   // Service Worker - 图片缓存
@@ -656,6 +761,9 @@ const App = () => {
     isGenerating,
     isPrefetching,
     prefetchedShortCode,
+    shareImportError,
+    setShareImportError,
+    isImportingShare,
     setSharedTemplateData,
     setShowShareImportModal,
     setShowShareOptionsModal,
@@ -682,6 +790,12 @@ const App = () => {
     setCategories
   );
 
+  useEffect(() => {
+    if (!shareImportError) return;
+    setNoticeMessage(shareImportError);
+    setShareImportError(null);
+  }, [shareImportError, setShareImportError]);
+
   // Template Management
   const templateManagement = useTemplateManagement(
     templates,
@@ -693,6 +807,10 @@ const App = () => {
     setEditingTemplateNameId,
     setTempTemplateName,
     setTempTemplateAuthor,
+    tempTemplateBestModel,
+    setTempTemplateBestModel,
+    tempTemplateBaseImage,
+    setTempTemplateBaseImage,
     language,
     isMobileDevice,
     setMobileTab,
@@ -709,11 +827,88 @@ const App = () => {
     handleStopEditing
   } = templateManagement;
 
+  const requestDeleteTemplate = React.useCallback((id, e) => {
+    if (e) e.stopPropagation();
+    setDeleteTemplateTargetId(id);
+    setIsDeleteTemplateConfirmOpen(true);
+  }, []);
+
+  const confirmDeleteTemplate = React.useCallback(() => {
+    if (!deleteTemplateTargetId) return;
+    handleDeleteTemplate(deleteTemplateTargetId, undefined, { skipConfirm: true });
+    setDeleteTemplateTargetId(null);
+  }, [deleteTemplateTargetId, handleDeleteTemplate]);
+
+  const openExportModal = React.useCallback(() => {
+    if (userTemplates.length === 0) {
+      setNoticeMessage(language === 'cn' ? '暂无可导出的个人模版' : 'No user templates to export');
+      return;
+    }
+    setSelectedExportTemplateIds(userTemplates.map(t => t.id));
+    setIsExportModalOpen(true);
+  }, [userTemplates, language]);
+
+  const toggleExportTemplateId = React.useCallback((id) => {
+    setSelectedExportTemplateIds(prev => (
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    ));
+  }, []);
+
+  const toggleExportSelectAll = React.useCallback(() => {
+    if (selectedExportTemplateIds.length === userTemplates.length) {
+      setSelectedExportTemplateIds([]);
+    } else {
+      setSelectedExportTemplateIds(userTemplates.map(t => t.id));
+    }
+  }, [selectedExportTemplateIds, userTemplates]);
+
+  const openActionConfirm = React.useCallback((config) => {
+    setActionConfirm(config);
+  }, []);
+
+  const closeActionConfirm = React.useCallback(() => {
+    setActionConfirm(null);
+  }, []);
+
+  const requestResetTemplate = React.useCallback((id, e) => {
+    if (e) e.stopPropagation();
+    openActionConfirm({
+      title: language === 'cn' ? '恢复模板' : 'Reset Template',
+      message: t('confirm_reset_template'),
+      confirmText: language === 'cn' ? '恢复' : 'Reset',
+      cancelText: language === 'cn' ? '取消' : 'Cancel',
+      onConfirm: () => handleResetTemplate(id, undefined, { skipConfirm: true }),
+    });
+  }, [language, t, handleResetTemplate, openActionConfirm]);
+
   // 包装 saveTemplateName，传入状态值
   const saveTemplateName = () => {
     if (editingTemplateNameId && tempTemplateName && tempTemplateName.trim()) {
-      templateManagement.saveTemplateName(editingTemplateNameId, tempTemplateName, tempTemplateAuthor);
+      templateManagement.saveTemplateName(
+        editingTemplateNameId, 
+        tempTemplateName, 
+        tempTemplateAuthor,
+        tempTemplateBestModel,
+        tempTemplateBaseImage
+      );
     }
+  };
+
+  // 新增：专门用于更新模板属性的函数（选择后立即生效）
+  const updateTemplateProperty = (property, value) => {
+    if (!activeTemplateId) return;
+    
+    // 更新临时状态
+    if (property === 'bestModel') setTempTemplateBestModel(value);
+    if (property === 'baseImage') setTempTemplateBaseImage(value);
+
+    // 立即保存到 templates 列表
+    setTemplates(prev => prev.map(t => {
+      if (t.id === activeTemplateId) {
+        return { ...t, [property]: value };
+      }
+      return t;
+    }));
   };
 
   // 包装 handleSelect，使其兼容原有调用方式
@@ -1221,9 +1416,9 @@ const App = () => {
 
     const notes = [...templateResult.notes, ...bankResult.notes];
     if (notes.length > 0) {
-      alert(`${t('refresh_done_with_conflicts')}\n- ${notes.join('\n- ')}`);
+      setNoticeMessage(`${t('refresh_done_with_conflicts')}\n- ${notes.join('\n- ')}`);
     } else {
-      alert(t('refresh_done_no_conflict'));
+      setNoticeMessage(t('refresh_done_no_conflict'));
     }
   }, [banks, defaults, templates, t]);
 
@@ -1486,10 +1681,19 @@ const App = () => {
       }
   };
 
-  const handleExportAllTemplates = async () => {
+  const handleExportAllTemplates = async (selectedIds = null) => {
       try {
+          const exportTemplates = selectedIds
+            ? templates.filter(t => selectedIds.includes(t.id))
+            : templates;
+
+          if (!exportTemplates.length) {
+            setNoticeMessage(language === 'cn' ? '请选择至少一个模版' : 'Select at least one template');
+            return;
+          }
+
           const exportData = {
-              templates,
+              templates: exportTemplates,
               banks,
               categories,
               version: 'v9',
@@ -1513,7 +1717,7 @@ const App = () => {
                           title: '提示词填空器备份',
                           text: '所有模板和词库的完整备份'
                       });
-                      showToastMessage('✅ 备份已分享/保存');
+                      setNoticeMessage(language === 'cn' ? '✅ 备份已分享/保存' : '✅ Backup shared/saved');
                       return;
                   }
               } catch (shareError) {
@@ -1541,10 +1745,10 @@ const App = () => {
               URL.revokeObjectURL(url);
           }, 100);
           
-          showToastMessage('✅ 备份已导出');
+          setNoticeMessage(language === 'cn' ? '✅ 备份已导出' : '✅ Backup exported');
       } catch (error) {
           console.error('导出失败:', error);
-          alert('导出失败，请重试');
+          setNoticeMessage(language === 'cn' ? '导出失败，请重试' : 'Export failed, please retry');
       }
   };
 
@@ -1689,20 +1893,18 @@ const App = () => {
   };
 
   function handleClearAllData() {
-      if (window.confirm(t('confirm_clear_all'))) {
-          try {
-              // 只清除应用相关的数据
-              const keysToRemove = Object.keys(localStorage).filter(key => 
-                  key.startsWith('app_')
-              );
-              keysToRemove.forEach(key => localStorage.removeItem(key));
-              
-              // 刷新页面
-              window.location.reload();
-          } catch (error) {
-              console.error('清除数据失败:', error);
-              alert('清除数据失败');
-          }
+      try {
+          // 只清除应用相关的数据
+          const keysToRemove = Object.keys(localStorage).filter(key => 
+              key.startsWith('app_')
+          );
+          keysToRemove.forEach(key => localStorage.removeItem(key));
+          
+          // 刷新页面
+          window.location.reload();
+      } catch (error) {
+          console.error('清除数据失败:', error);
+          setNoticeMessage(language === 'cn' ? '清除数据失败' : 'Failed to clear data');
       }
   }
 
@@ -1715,13 +1917,31 @@ const App = () => {
   }
 
   function handleResetSystemData() {
-    if (window.confirm('确定要重置系统数据吗？这将清除所有本地修改并重新从系统加载初始模板。')) {
-        localStorage.removeItem('app_templates');
-        localStorage.removeItem('app_banks');
-        localStorage.removeItem('app_categories');
-        window.location.reload();
-    }
+      localStorage.removeItem('app_templates');
+      localStorage.removeItem('app_banks');
+      localStorage.removeItem('app_categories');
+      window.location.reload();
   }
+
+  const requestClearAllData = React.useCallback(() => {
+    openActionConfirm({
+      title: language === 'cn' ? '清空数据' : 'Clear All Data',
+      message: t('confirm_clear_all'),
+      confirmText: language === 'cn' ? '清空' : 'Clear',
+      cancelText: language === 'cn' ? '取消' : 'Cancel',
+      onConfirm: handleClearAllData
+    });
+  }, [language, t, handleClearAllData, openActionConfirm]);
+
+  const requestResetSystemData = React.useCallback(() => {
+    openActionConfirm({
+      title: language === 'cn' ? '重置系统数据' : 'Reset System Data',
+      message: language === 'cn' ? '确定要重置系统数据吗？这将清除所有本地修改并重新从系统加载初始模板。' : 'Reset system data? This will clear local changes and reload defaults.',
+      confirmText: language === 'cn' ? '重置' : 'Reset',
+      cancelText: language === 'cn' ? '取消' : 'Cancel',
+      onConfirm: handleResetSystemData
+    });
+  }, [language, openActionConfirm]);
   
   const handleSwitchToLocalStorage = async () => {
       setStorageMode('browser');
@@ -1899,14 +2119,23 @@ const App = () => {
         return getLocalized(value, templateLanguage) || match;
     });
 
-    const cleanText = finalString
+    let cleanText = finalString
         .replace(/###\s/g, '')
         .replace(/\*\*(.*?)\*\*/g, '$1')
         .replace(/\n\s*\n/g, '\n\n');
 
+    // 自动追加出图平台建议（如果有）
+    if (activeTemplate.bestModel) {
+      const platformText = language === 'cn' 
+        ? `\n\n[推荐出图平台: ${activeTemplate.bestModel}]`
+        : `\n\n[Recommended Platform: ${activeTemplate.bestModel}]`;
+      cleanText += platformText;
+    }
+
     copyToClipboard(cleanText).then((success) => {
       if (success) {
         setCopied(true);
+        setIsCopySuccessModalOpen(true);
         setTimeout(() => setCopied(false), 2000);
       }
     });
@@ -2433,14 +2662,12 @@ const App = () => {
       {/* 桌面端全局侧边栏 - 位置固定不动 */}
       {!isMobileDevice && (
         <>
-          <Sidebar 
-            activeTab={isSettingsOpen ? 'settings' : (showDiscoveryOverlay ? 'home' : 'details')}
+          <Sidebar
+            activeTab={isSettingPage ? 'settings' : (showDiscoveryOverlay ? 'home' : 'details')}
             onHome={() => {
-              setIsSettingsOpen(false);
               handleSetDiscoveryView(true);
             }}
             onDetail={() => {
-              setIsSettingsOpen(false);
               handleSetDiscoveryView(false);
             }}
             isSortMenuOpen={isSortMenuOpen}
@@ -2449,7 +2676,6 @@ const App = () => {
             setSortOrder={setSortOrder}
             setRandomSeed={setRandomSeed}
             onRefresh={handleRefreshSystemData}
-            onSettings={() => setIsSettingsOpen(true)}
             language={language}
             setLanguage={setLanguage}
             isDarkMode={isDarkMode}
@@ -2525,26 +2751,55 @@ const App = () => {
       
       {/* 主视图区域 */}
       <div className="flex-1 relative flex overflow-hidden">
-        {isSettingsOpen && !isMobileDevice ? (
-          <SettingsView
-            language={language}
-            setLanguage={setLanguage}
-            storageMode={storageMode}
-            setStorageMode={setStorageMode}
-            directoryHandle={directoryHandle}
-            handleImportTemplate={handleImportTemplate}
-            handleExportAllTemplates={handleExportAllTemplates}
-            handleResetSystemData={handleRefreshSystemData}
-            handleClearAllData={handleClearAllData}
-            handleSelectDirectory={handleSelectDirectory}
-            handleSwitchToLocalStorage={handleSwitchToLocalStorage}
-            SYSTEM_DATA_VERSION={SYSTEM_DATA_VERSION}
-            t={t}
-            globalContainerStyle={globalContainerStyle}
-            isDarkMode={isDarkMode}
-            themeMode={themeMode}
-            setThemeMode={setThemeMode}
-          />
+        {isSettingPage || (isMobileDevice && mobileTab === 'settings') ? (
+          isMobileDevice ? (
+            <MobileSettingsView
+              language={language}
+              setLanguage={setLanguage}
+              storageMode={storageMode}
+              setStorageMode={setStorageMode}
+              directoryHandle={directoryHandle}
+              handleImportTemplate={handleImportTemplate}
+              handleExportAllTemplates={openExportModal}
+              handleCompleteBackup={handleCompleteBackup}
+              handleImportAllData={handleImportAllData}
+              handleResetSystemData={handleRefreshSystemData}
+              handleClearAllData={requestClearAllData}
+              SYSTEM_DATA_VERSION={SYSTEM_DATA_VERSION}
+              t={t}
+              isDarkMode={isDarkMode}
+              themeMode={themeMode}
+              setThemeMode={setThemeMode}
+            iCloudEnabled={iCloudEnabled}
+            setICloudEnabled={setICloudEnabled}
+            lastICloudSyncAt={lastICloudSyncAt}
+            lastICloudSyncError={lastICloudSyncError}
+            />
+          ) : (
+            <SettingsView
+              language={language}
+              setLanguage={setLanguage}
+              storageMode={storageMode}
+              setStorageMode={setStorageMode}
+              directoryHandle={directoryHandle}
+              handleImportTemplate={handleImportTemplate}
+              handleExportAllTemplates={openExportModal}
+              handleResetSystemData={handleRefreshSystemData}
+              handleClearAllData={requestClearAllData}
+              handleSelectDirectory={handleSelectDirectory}
+              handleSwitchToLocalStorage={handleSwitchToLocalStorage}
+              SYSTEM_DATA_VERSION={SYSTEM_DATA_VERSION}
+              t={t}
+              globalContainerStyle={globalContainerStyle}
+              isDarkMode={isDarkMode}
+              themeMode={themeMode}
+              setThemeMode={setThemeMode}
+                  iCloudEnabled={iCloudEnabled}
+                  setICloudEnabled={setICloudEnabled}
+                  lastICloudSyncAt={lastICloudSyncAt}
+                  lastICloudSyncError={lastICloudSyncError}
+            />
+          )
         ) : showDiscoveryOverlay ? (
           <DiscoveryView
             filteredTemplates={filteredTemplates}
@@ -2563,7 +2818,6 @@ const App = () => {
             handleRefreshSystemData={handleRefreshSystemData}
             language={language}
             setLanguage={setLanguage}
-            setIsSettingsOpen={setIsSettingsOpen}
             isDarkMode={isDarkMode}
             isSortMenuOpen={isSortMenuOpen}
             setIsSortMenuOpen={setIsSortMenuOpen}
@@ -2612,18 +2866,17 @@ const App = () => {
               language={language}
               setLanguage={setLanguage}
               isDarkMode={isDarkMode}
-              setIsSettingsOpen={setIsSettingsOpen}
               t={t}
               isSortMenuOpen={isSortMenuOpen}
               setIsSortMenuOpen={setIsSortMenuOpen}
               sortOrder={sortOrder}
               setSortOrder={setSortOrder}
               setRandomSeed={setRandomSeed}
-              handleResetTemplate={handleResetTemplate}
+              handleResetTemplate={requestResetTemplate}
               startRenamingTemplate={startRenamingTemplate}
               handleDuplicateTemplate={handleDuplicateTemplate}
               handleExportTemplate={handleExportTemplate}
-            handleDeleteTemplate={handleDeleteTemplate}
+            handleDeleteTemplate={requestDeleteTemplate}
             handleAddTemplate={handleAddTemplate}
             handleManualTokenImport={handleManualTokenImport}
             setShowImportTokenModal={setShowImportTokenModal}
@@ -2688,6 +2941,10 @@ const App = () => {
               setEditingTemplateNameId={setEditingTemplateNameId}
               tempTemplateAuthor={tempTemplateAuthor}
               setTempTemplateAuthor={setTempTemplateAuthor}
+              tempTemplateBestModel={tempTemplateBestModel}
+              setTempTemplateBestModel={setTempTemplateBestModel}
+              tempTemplateBaseImage={tempTemplateBaseImage}
+              setTempTemplateBaseImage={setTempTemplateBaseImage}
 
               // ===== 标签编辑 =====
               handleUpdateTemplateTags={handleUpdateTemplateTags}
@@ -2724,29 +2981,10 @@ const App = () => {
               onGenerateAITerms={handleGenerateAITerms}
               onSmartSplitClick={handleSmartSplit}
               isSmartSplitLoading={isSmartSplitLoading}
+              updateTemplateProperty={updateTemplateProperty}
+              setIsTemplatesDrawerOpen={setIsTemplatesDrawerOpen}
+              setIsBanksDrawerOpen={setIsBanksDrawerOpen}
             />
-
-            {/* Mobile Side Drawer Triggers - 保持在 TemplateEditor 外部 */}
-            {isMobileDevice && mobileTab === 'editor' && (
-              <>
-                <div className={`md:hidden fixed left-0 top-1/2 -translate-y-1/2 z-50 transition-all duration-300`}>
-                  <button
-                    onClick={() => setIsTemplatesDrawerOpen(true)}
-                    className={`p-3 backdrop-blur-md rounded-r-2xl shadow-lg border border-l-0 active:scale-95 transition-all ${isDarkMode ? 'bg-black/40 border-white/5 text-gray-600' : 'bg-white/60 border-white/40 text-gray-400'}`}
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
-                <div className={`md:hidden fixed right-0 top-1/2 -translate-y-1/2 z-50 transition-all duration-300`}>
-                  <button
-                    onClick={() => setIsBanksDrawerOpen(true)}
-                    className={`p-3 backdrop-blur-md rounded-l-2xl shadow-lg border border-r-0 active:scale-95 transition-all ${isDarkMode ? 'bg-black/40 border-white/5 text-gray-600' : 'bg-white/60 border-white/40 text-gray-400'}`}
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                </div>
-              </>
-            )}
 
             {/* Image URL Input Modal - 保持在 TemplateEditor 外部 */}
             {showImageUrlInput && (
@@ -2787,30 +3025,6 @@ const App = () => {
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Mobile Settings View - 保持在 TemplateEditor 外部 */}
-            {mobileTab === 'settings' && isMobileDevice && (
-              <div className={`fixed inset-0 z-40 flex flex-col transition-colors duration-300 pt-safe ${isDarkMode ? 'bg-[#2A2928]' : 'bg-white'}`}>
-                <MobileSettingsView
-                  language={language}
-                  setLanguage={setLanguage}
-                  storageMode={storageMode}
-                  setStorageMode={setStorageMode}
-                  directoryHandle={directoryHandle}
-                  handleImportTemplate={handleImportTemplate}
-                  handleExportAllTemplates={handleExportAllTemplates}
-                  handleCompleteBackup={handleCompleteBackup}
-                  handleImportAllData={handleImportAllData}
-                  handleResetSystemData={handleRefreshSystemData}
-                  handleClearAllData={handleClearAllData}
-                  SYSTEM_DATA_VERSION={SYSTEM_DATA_VERSION}
-                  t={t}
-                  isDarkMode={isDarkMode}
-                  themeMode={themeMode}
-                  setThemeMode={setThemeMode}
-                />
               </div>
             )}
 
@@ -2881,6 +3095,14 @@ const App = () => {
         confirmText={t("confirm")}
       />
 
+      <CopySuccessModal
+        isOpen={isCopySuccessModalOpen}
+        onClose={() => setIsCopySuccessModalOpen(false)}
+        bestModel={activeTemplate?.bestModel}
+        isDarkMode={isDarkMode}
+        language={language}
+      />
+
       {/* --- Add Bank Modal --- */}
       <AddBankModal
         isOpen={isAddingBank}
@@ -2922,6 +3144,180 @@ const App = () => {
         isDarkMode={isDarkMode}
       />
 
+      {/* --- Delete Template Confirm Modal --- */}
+      <ConfirmModal
+        isOpen={isDeleteTemplateConfirmOpen}
+        onClose={() => setIsDeleteTemplateConfirmOpen(false)}
+        onConfirm={confirmDeleteTemplate}
+        title={language === 'cn' ? '删除模板' : 'Delete Template'}
+        message={t('confirm_delete_template')}
+        confirmText={language === 'cn' ? '删除' : 'Delete'}
+        cancelText={language === 'cn' ? '取消' : 'Cancel'}
+        isDarkMode={isDarkMode}
+      />
+
+      {/* --- Action Confirm Modal --- */}
+      {actionConfirm && (
+        <ConfirmModal
+          isOpen={true}
+          onClose={closeActionConfirm}
+          onConfirm={() => {
+            actionConfirm.onConfirm?.();
+            closeActionConfirm();
+          }}
+          title={actionConfirm.title}
+          message={actionConfirm.message}
+          confirmText={actionConfirm.confirmText}
+          cancelText={actionConfirm.cancelText}
+          isDarkMode={isDarkMode}
+        />
+      )}
+
+      {/* --- Notice Modal --- */}
+      {noticeMessage && (
+        <div
+          className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={() => setNoticeMessage(null)}
+        >
+          <div
+            className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border animate-in slide-in-from-bottom-4 duration-300 ${isDarkMode ? 'bg-[#1C1917] border-white/10' : 'bg-white border-gray-100'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`p-6 flex justify-between items-center ${isDarkMode ? 'bg-white/[0.02]' : 'bg-gray-50/50'}`}>
+              <h3 className={`font-black text-lg tracking-tight ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {language === 'cn' ? '提示' : 'Notice'}
+              </h3>
+              <button
+                onClick={() => setNoticeMessage(null)}
+                className={`p-2 rounded-xl transition-all ${isDarkMode ? 'hover:bg-white/10 text-gray-500 hover:text-gray-300' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'}`}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-8">
+              <p className={`text-base font-medium leading-relaxed whitespace-pre-line ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {noticeMessage}
+              </p>
+            </div>
+            <div className={`p-6 flex justify-end ${isDarkMode ? 'bg-white/[0.02]' : 'bg-gray-50/50'}`}>
+              <PremiumButton
+                onClick={() => setNoticeMessage(null)}
+                isDarkMode={isDarkMode}
+                className="!h-11 !rounded-2xl min-w-[100px]"
+              >
+                <span className="text-sm font-bold px-4">{language === 'cn' ? '知道了' : 'OK'}</span>
+              </PremiumButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- Share Import Loading --- */}
+      {isImportingShare && (
+        <div className="fixed inset-0 z-[1000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className={`w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border ${isDarkMode ? 'bg-[#1C1917] border-white/10' : 'bg-white border-gray-100'}`}>
+            <div className="p-8 flex flex-col items-center gap-4">
+              <div className="w-10 h-10 rounded-full border-2 border-orange-500 border-t-transparent animate-spin" />
+              <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                {language === 'cn' ? '正在解析模版…' : 'Loading template…'}
+              </div>
+              <div className={`text-[10px] font-bold opacity-60 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {language === 'cn' ? '请稍等片刻' : 'Please wait'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- Export Templates Modal --- */}
+      {isExportModalOpen && (
+        <div
+          className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={() => setIsExportModalOpen(false)}
+        >
+          <div
+            className={`w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border animate-in slide-in-from-bottom-4 duration-300 ${isDarkMode ? 'bg-[#1C1917] border-white/10' : 'bg-white border-gray-100'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`p-6 flex justify-between items-center ${isDarkMode ? 'bg-white/[0.02]' : 'bg-gray-50/50'}`}>
+              <h3 className={`font-black text-lg tracking-tight ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {language === 'cn' ? '导出模版' : 'Export Templates'}
+              </h3>
+              <button
+                onClick={() => setIsExportModalOpen(false)}
+                className={`p-2 rounded-xl transition-all ${isDarkMode ? 'hover:bg-white/10 text-gray-500 hover:text-gray-300' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'}`}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {language === 'cn' ? '仅导出个人模版（系统模版不可选）' : 'Only user templates can be exported'}
+                </span>
+                <button
+                  onClick={toggleExportSelectAll}
+                  className={`text-xs font-black uppercase tracking-widest ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
+                >
+                  {selectedExportTemplateIds.length === userTemplates.length
+                    ? (language === 'cn' ? '取消全选' : 'Clear')
+                    : (language === 'cn' ? '全选' : 'Select All')}
+                </button>
+              </div>
+
+              <div className={`max-h-[50vh] overflow-y-auto rounded-2xl border ${isDarkMode ? 'border-white/5 bg-white/5' : 'border-gray-100 bg-gray-50'}`}>
+                {userTemplates.map((tpl) => {
+                  const checked = selectedExportTemplateIds.includes(tpl.id);
+                  return (
+                    <label
+                      key={tpl.id}
+                      className={`flex items-center gap-3 px-4 py-3 border-b last:border-b-0 cursor-pointer ${isDarkMode ? 'border-white/5 hover:bg-white/5' : 'border-gray-100 hover:bg-white'}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleExportTemplateId(tpl.id)}
+                        className="accent-orange-500"
+                      />
+                      <div className="flex flex-col min-w-0">
+                        <span className={`text-sm font-bold truncate ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                          {getLocalized(tpl.name, language)}
+                        </span>
+                        <span className={`text-[10px] font-bold opacity-60 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {tpl.author || 'PromptFill User'}
+                        </span>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={`p-6 flex gap-3 justify-end ${isDarkMode ? 'bg-white/[0.02]' : 'bg-gray-50/50'}`}>
+              <PremiumButton
+                onClick={() => setIsExportModalOpen(false)}
+                isDarkMode={isDarkMode}
+                className="!h-11 !rounded-2xl min-w-[100px]"
+              >
+                <span className="text-sm font-bold px-4">{language === 'cn' ? '取消' : 'Cancel'}</span>
+              </PremiumButton>
+              <PremiumButton
+                onClick={async () => {
+                  await handleExportAllTemplates(selectedExportTemplateIds);
+                  setIsExportModalOpen(false);
+                }}
+                active={true}
+                isDarkMode={isDarkMode}
+                className="!h-11 !rounded-2xl min-w-[120px]"
+              >
+                <span className="text-sm font-black tracking-widest px-4">{language === 'cn' ? '导出' : 'Export'}</span>
+              </PremiumButton>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* --- Insert Variable Modal --- */}
       <InsertVariableModal
         isOpen={isInsertModalOpen}
@@ -2951,7 +3347,6 @@ const App = () => {
         setZoomedImage={setZoomedImage}
         setMobileTab={setMobileTab}
         handleRefreshSystemData={handleRefreshSystemData}
-        setIsSettingsOpen={setIsSettingsOpen}
         isDarkMode={isDarkMode}
       />
 

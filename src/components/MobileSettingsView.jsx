@@ -3,7 +3,7 @@ import {
   Settings, Globe, Database, Download, Upload, 
   RotateCcw, Trash2, Mail, MessageCircle, Github, 
   ChevronRight, RefreshCw, FileText, Info, X,
-  Moon, Sun, Heart
+  Moon, Sun, Heart, Cloud
 } from 'lucide-react';
 
 export const MobileSettingsView = ({ 
@@ -16,11 +16,27 @@ export const MobileSettingsView = ({
   SYSTEM_DATA_VERSION, t,
   isDarkMode,
   themeMode,
-  setThemeMode
+  setThemeMode,
+  iCloudEnabled,
+  setICloudEnabled,
+  lastICloudSyncAt,
+  lastICloudSyncError
 }) => {
   const [showWechatQR, setShowWechatQR] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
   const [storageStats, setStorageStats] = React.useState(null);
+
+  const isTauriMobile = !!(window.__TAURI_INTERNALS__ && /iPhone|iPad|iPod/i.test(navigator.userAgent));
+  const iCloudStatusLabel = () => {
+    if (lastICloudSyncError) return language === 'cn' ? '同步失败' : 'Failed';
+    if (!iCloudEnabled) return language === 'cn' ? '已关闭' : 'OFF';
+    if (!lastICloudSyncAt) return language === 'cn' ? '等待同步' : 'Pending';
+    const time = new Date(lastICloudSyncAt).toLocaleString();
+    return language === 'cn' ? `上次同步: ${time}` : `Last sync: ${time}`;
+  };
+  const iCloudDescription = lastICloudSyncError
+    ? (language === 'cn' ? `同步失败：${lastICloudSyncError}` : `Sync failed: ${lastICloudSyncError}`)
+    : (language === 'cn' ? '开启后自动同步模版与词库' : 'Auto sync templates and banks');
 
   React.useEffect(() => {
     if (storageMode === 'browser' && navigator.storage && navigator.storage.estimate) {
@@ -37,11 +53,23 @@ export const MobileSettingsView = ({
   // 完善后的更新日志 (同步桌面端内容)
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.8.2', 
+      date: '2026-01-31', 
+      title: '移动端 UI 深度优化与鸣谢更新',
+      content: [
+        '首页重构：引入渐进式毛玻璃顶部栏与无滚动条横向标签导航。',
+        '布局重组：详情页集成模版与词库抽屉开关至顶栏，优化屏幕利用率。',
+        '复制增强：复制提示词结果时，自动附带推荐的出图平台信息。',
+        '视觉微调：去除设置界面图标底色，提升整体视觉通透感。',
+        '鸣谢更新：完整补充了所有提示词灵感贡献作者。'
+      ]
+    },
+    { 
       version: 'Data V0.8.7', 
       date: '2026-01-24', 
       title: '提示词作者标注修正',
       content: [
-        '🛠️ 修正了部分模版的作者归属信息'
+        '修正了部分模版的作者归属信息'
       ]
     },
     { 
@@ -49,7 +77,7 @@ export const MobileSettingsView = ({
       date: '2026-01-22', 
       title: '自定义词条支持双语模式',
       content: [
-        '✨ 自定义词条现在支持分别输入中英文内容'
+        '自定义词条现在支持分别输入中英文内容'
       ]
     },
     { 
@@ -57,9 +85,9 @@ export const MobileSettingsView = ({
       date: '2026-01-17', 
       title: '智能词条正式上线与多项增强',
       content: [
-        '✨ 智能词条正式版：支持 AI 驱动的提示词自动生成',
-        '📚 官方模版扩充：新增紫禁城、食品广告等多款模版',
-        '🚀 性能优化：优化瀑布流加载与移动端交互体验'
+        '智能词条正式版：支持 AI 驱动的提示词自动生成',
+        '官方模版扩充：新增紫禁城、食品广告等多款模版',
+        '性能优化：优化瀑布流加载与移动端交互体验'
       ]
     },
     { 
@@ -144,11 +172,23 @@ export const MobileSettingsView = ({
     }
   ] : [
     { 
+      version: 'V0.8.2', 
+      date: '2026-01-31', 
+      title: 'Mobile UI Deep Optimization',
+      content: [
+        'Header Refactor: New progressive blur & horizontal tag navigation',
+        'Editor Layout: Integrated drawer toggles into top bar',
+        'Copy Enhancement: Auto-append recommended platform info to results',
+        'Visual Refinement: Clean settings icons & meta info alignment',
+        'Credits Update: Added more prompt inspiration contributors'
+      ]
+    },
+    { 
       version: 'Data V0.8.7', 
       date: '2026-01-24', 
       title: 'Author Attribution Fix',
       content: [
-        '🛠️ Corrected author info for specific templates'
+        'Corrected author info for specific templates'
       ]
     },
     { 
@@ -156,7 +196,7 @@ export const MobileSettingsView = ({
       date: '2026-01-22', 
       title: 'Bilingual Custom Terms',
       content: [
-        '✨ Added separate CN/EN input for custom terms'
+        'Added separate CN/EN input for custom terms'
       ]
     },
     { 
@@ -164,9 +204,9 @@ export const MobileSettingsView = ({
       date: '2026-01-17', 
       title: 'AI Official Launch & Improvements',
       content: [
-        '✨ AI Terms Official: AI-powered prompt generation is live',
-        '📚 Library Expansion: Added new high-quality presets',
-        '🚀 Performance: Faster loading and smoother UI/UX'
+        'AI Terms Official: AI-powered prompt generation is live',
+        'Library Expansion: Added new high-quality presets',
+        'Performance: Faster loading and smoother UI/UX'
       ]
     },
     { 
@@ -274,7 +314,7 @@ export const MobileSettingsView = ({
       }`}
     >
       <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-xl flex-shrink-0 ${danger ? 'bg-red-50 text-red-500' : (isDarkMode ? 'bg-white/10 text-gray-300' : 'bg-gray-50 text-gray-600')}`}>
+        <div className={`flex-shrink-0 ${danger ? 'text-red-500' : (isDarkMode ? 'text-gray-400' : 'text-gray-500')}`}>
           <Icon size={18} />
         </div>
         <div className="flex flex-col items-start min-w-0">
@@ -310,7 +350,7 @@ export const MobileSettingsView = ({
           isDarkMode ? 'border-white/5' : 'border-gray-100/50'
         }`}>
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-xl ${isDarkMode ? 'bg-white/10 text-gray-300' : 'bg-gray-50 text-gray-600'}`}>
+            <div className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
               {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
             </div>
             <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
@@ -340,6 +380,17 @@ export const MobileSettingsView = ({
           value={storageMode === 'browser' ? (language === 'cn' ? '浏览器' : 'Browser') : (language === 'cn' ? '本地文件夹' : 'Local Folder')} 
           disabled={true} // 移动端暂不支持切换到本地文件夹
         />
+        
+        {isTauriMobile && (
+          <SettingItem 
+            icon={Cloud} 
+            label={language === 'cn' ? 'iCloud 同步' : 'iCloud Sync'} 
+            description={iCloudDescription}
+            value={iCloudStatusLabel()}
+            onClick={() => setICloudEnabled(!iCloudEnabled)}
+          />
+        )}
+
         {storageMode === 'browser' && storageStats && (
           <div className="px-5 mb-4 mt-2">
             <div className="flex justify-between items-center mb-1.5">
@@ -369,7 +420,7 @@ export const MobileSettingsView = ({
               isDarkMode ? 'border-white/5 hover:bg-white/5 active:bg-white/10' : 'border-gray-100/50 hover:bg-white/50 active:bg-white/80'
             }`}>
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-xl ${isDarkMode ? 'bg-white/10 text-gray-300' : 'bg-gray-50 text-gray-600'}`}>
+                <div className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
                   <Download size={18} />
                 </div>
                 <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{t('import_template')}</span>
@@ -507,7 +558,7 @@ export const MobileSettingsView = ({
                   {language === 'cn' ? '感谢灵感来源作者：' : 'Thanks to prompt authors:'}
                   <br />
                   <span className={`font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    宝玉(@dotey), MarioTan(@tanshilong), sundyme, Berryxia.AI, sidona, AmirMushich, Latte(@0xbisc), 阿兹特克小羊驼(@AztecaAlpaca)
+                    宝玉(@dotey), MarioTan(@tanshilong), sundyme, Berryxia.AI, sidona, AmirMushich, Latte(@0xbisc), 阿兹特克小羊驼(@AztecaAlpaca), Keng哥(@langzihan), 虎小象(@hx831126), PlayForge AI(@94van.AI), underwood(@underwoodxie96), @YaseenK7212, Taaruk(@Taaruk_), M7(@mi7_crypto), @aleenaamiir, 两斤(@0x00_Krypt), ttmouse-豆爸(@ttmouse), Amira Zairi(@azed_ai), Ege(@egeberkina), Vigo Zhao(@VigoCreativeAI), Michael Rabone(@michaelrabone), Gadgetify(@Gdgtify)
                   </span>
                 </p>
                 
@@ -533,7 +584,7 @@ export const MobileSettingsView = ({
       )}
 
       <div className={`text-center pb-8 ${isDarkMode ? 'opacity-10' : 'opacity-20'}`}>
-        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.8.1</p>
+        <p className={`text-[10px] font-black tracking-[0.3em] uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Prompt Fill V0.8.2</p>
         <p className={`text-[9px] font-bold mt-1 ${isDarkMode ? 'text-white' : 'text-black'}`}>Made by CornerStudio</p>
       </div>
     </div>

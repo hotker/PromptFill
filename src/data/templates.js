@@ -25,7 +25,11 @@
  *   id: "tpl_cn_only",
  *   name: "仅中文模板",
  *   content: "中文内容...",
- *   language: "cn"  // 或 ["cn"]
+ *   language: "cn",
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"  ,
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"// 或 ["cn"]
  * }
  */
 
@@ -1537,6 +1541,292 @@ Based on design requirements, create an isometric perspective (orthographic axon
 **Technical Requirements**: Use 3D modeling material textures and common rendering software effects, including material texture effects, AO effects, and outline effects (selected based on room condition). White background, Blender rendering quality.`
 };
 
+export const TEMPLATE_PRODUCT_DESIGN_SPEC = {
+  cn: `### 产品设计规范图
+
+**布局**: 垂直 3:4 画布，暖色调中性纸张背景
+
+**上半部分 - 生活方式产品图**:
+
+一个 {{product_category}}，放置在 {{environment_style}} 中。
+
+**环境细节**:
+- {{lighting}}，柔和但高对比度的阴影
+- 微妙的混凝土或石材地面
+- 有纹理的石膏墙背景
+- 周围留有大量留白
+
+**渲染风格**:
+- 编辑式生活方式摄影
+- 高真实感
+- 暖色、柔和、高端的色调分级
+
+**下半部分 - 技术规格面板**:
+
+**技术绘图** (左侧和中部):
+- {{drawing_style}}
+- 正视图、侧视图、四分之三剖面图
+- 正交投影
+- 柔和的红色或深棕色细技术线
+- 最小的编辑式测量标注
+
+**材料面板** (右侧):
+- 3-4 个符合产品调性的材质样本
+- 方形或矩形样品
+- 小型编辑式说明标签
+- 技术但精致的语调
+
+**排版风格**:
+- 最小编辑式
+- 微妙的说明文字，无大标题
+- 柔和黑色或深棕色
+
+**整体美学**:
+- 设计目录 / 产品设计期刊氛围
+- 建筑感、高端、宁静
+- 避免杂乱、鲜艳颜色、重度品牌化、过度装饰的图形
+
+**约束**:
+- 不改变产品设计
+- 不发明新材料
+- 除非参考图中有，否则不添加徽标
+- 绘图中不使用透视扭曲`,
+
+  en: `### Product Design Specification
+
+**Layout**: Vertical 3:4 canvas, warm neutral paper background
+
+**Top Section - Lifestyle Product Image**:
+
+A {{product_category}} placed in {{environment_style}}.
+
+**Environment Details**:
+- {{lighting}}, soft but high-contrast shadows
+- Subtle concrete or stone flooring
+- Textured plaster wall background
+- Generous whitespace around product
+
+**Rendering Style**:
+- Editorial lifestyle photography
+- High realism
+- Warm, muted, premium color grading
+
+**Bottom Section - Technical Specification Panel**:
+
+**Technical Drawings** (bottom left and center):
+- {{drawing_style}}
+- Front view, side view, three-quarter cutaway view
+- Orthographic projection
+- Muted red or sepia fine technical lines
+- Minimal, editorial measurement callouts
+
+**Materials Panel** (bottom right):
+- 3-4 material swatches that match the product's aesthetic
+- Square or rectangular samples
+- Small editorial caption labels
+- Technical but refined tone
+
+**Typography**:
+- Minimal editorial
+- Subtle captions, no large headlines
+- Soft black or dark brown
+
+**Overall Aesthetic**:
+- Design catalog / product design journal mood
+- Architectural, premium, calm
+- Avoid clutter, bold colors, heavy branding, overly decorative graphics
+
+**Constraints**:
+- Do not change product design
+- Do not invent new materials
+- No logos unless present in reference
+- No perspective distortion in drawings`
+};
+
+export const TEMPLATE_CHARACTER_LINE_ART = {
+  cn: `### 人物转手绘插画
+
+将照片转换为黑白线稿插画，钢笔墨水绘制风格。
+
+**人物主体**: {{character_subject}}
+
+**画面视角**: {{portrait_view}}
+
+**艺术风格**:
+- {{line_art_style}}
+- 粗轮廓线，高对比度
+- 干净的线条，手绘外观
+- 图形小说美学
+
+**阴影技法**: {{shading_technique}}
+
+**背景处理**: {{background_treatment}}
+
+**整体效果**:
+- 单色素描
+- 黑白线稿插图
+- 漫画书风格肖像
+- 极简主义，强调轮廓`,
+
+  en: `### Convert to Character Line Art
+
+Convert to black and white line art illustration, pen and ink drawing style.
+
+**Character Subject**: {{character_subject}}
+
+**Portrait View**: {{portrait_view}}
+
+**Art Style**:
+- {{line_art_style}}
+- Bold outlines, high contrast
+- Clean linework, hand-drawn appearance
+- Graphic novel aesthetic
+
+**Shading Technique**: {{shading_technique}}
+
+**Background Treatment**: {{background_treatment}}
+
+**Overall Effect**:
+- Monochrome sketch
+- Black and white line art illustration
+- Comic book style portrait
+- Minimalist, emphasizing outlines`
+};
+
+export const TEMPLATE_CLASSIC_GAME_REALISM = {
+  cn: `### 经典游戏真实化
+
+以照片级真实感重新想象经典游戏世界。
+
+在一个图像中，以摄影方式可视化 {{classic_game}} 的角色、敌人和周围世界的真实模样。使图像尽可能保持与游戏的可识别性。
+
+**视觉要求**:
+- 照片级真实渲染
+- 8位/16位游戏美学的现实诠释
+- 标志性游戏元素的真实化呈现
+- 保持原始游戏色彩和氛围的参考
+
+**质量标准**:
+- 高细节，电影级照明
+- 真实材质和纹理
+- 游戏场景的精确重建`,
+
+  en: `### Classic Game Realism
+
+Photorealistic reimagining of classic game worlds.
+
+In one image, photographically visualize what the characters, enemies, and surrounding world of {{classic_game}} would look like if it was real. Make this image as recognisable to the game as possible.
+
+**Visual Requirements**:
+- Photorealistic rendering
+- Realistic interpretation of 8-bit/16-bit game aesthetics
+- Realistic presentation of iconic game elements
+- Reference to original game colors and atmosphere
+
+**Quality Standards**:
+- High detail, cinematic lighting
+- Realistic materials and textures
+- Accurate reconstruction of game scenes`
+};
+
+export const TEMPLATE_SCIENCE_PAPER_MODEL = {
+  cn: `### 科学发现纸雕模型
+
+将重大科学发现解构为立体纸雕装置。
+
+**输入**: {{scientific_discovery}}
+
+**解构科学为3个叙事要素**:
+
+**模型（核心装置）**:
+- 识别代表理论的物理形状
+- 例如：DNA → 双螺旋结构 | 相对论 → 弯曲重力网格/球体 | 微生物 → 显微细胞 | 日心说 → 太阳系
+
+**研究者（角色）**:
+- 识别关键科学家
+- 例如：沃森、克里克 & 富兰克林 | 爱因斯坦 | 巴斯德 | 哥白尼
+
+**数据（图解）**:
+- 识别笔记的视觉语言
+- 例如：化学键、数学公式、生物草图、轨道路径
+
+**容器（实验日志）**:
+- 目标："科学立体"模型摄影
+- 物体：一本巨大的古董皮革装订日志
+- 姿势：书本直立，以严格的90度角打开（L形）
+- 垂直页面：作为黑板/图解墙
+- 水平页面：作为实验室地板
+
+**雕塑（纸艺理论）**:
+- 构建："模型"从书本中心装订处垂直升起
+- 材质：模型完全由书本自有的纸张条构成
+- 细节：纸条扭曲、折叠并连接形成结构（例如DNA的扭转梯形）
+- 高光：纸模型上微妙使用彩色墨水或铅笔（红、蓝、黄）以区分部分（例如碱基对或原子）
+
+**叙事比例（科学家）**:
+- 人物："研究者"的1:35比例微型人物站在水平页面上
+- 服装：时代准确的服装（例如1950年代实验服、维多利亚西装、文艺复兴长袍）
+- 动作：他们正在与巨大的纸模型互动——指向、用微小工具测量或持有微型剪贴板
+
+**视觉效果**:
+- 背景：模型后方的垂直页面覆盖着手绘墨水插图和与发现相关的图表
+- 标题：页面顶部手写文本："[输入] 的发现"
+- 前景：地面页面散布着涂写笔记、公式和签名
+
+**输出**:
+- 单张图像，1:1纵横比
+- 微距摄影，"学术历史"美学
+- 高纹理保真度`,
+
+  en: `### Scientific Discovery Paper Model
+
+Deconstruct major scientific discoveries into 3D paper sculpture installations.
+
+**Input**: {{scientific_discovery}}
+
+**Deconstruct the science into 3 Narrative Assets**:
+
+**Model (The Centerpiece)**:
+- Identify the physical shape that represents the theory
+- Examples: DNA → A Double Helix | Relativity → A Curved Gravity Grid/Sphere | Germs → A Microscopic Cell | Heliocentrism → The Solar System
+
+**Researchers (The Cast)**:
+- Identify the key scientists involved
+- Examples: Watson, Crick & Franklin | Einstein | Pasteur | Copernicus
+
+**Data (The Diagrams)**:
+- Identify the visual language of the notes
+- Examples: Chemical bonds, Mathematical formulas, Biological sketches, Orbital paths
+
+**Container (The Lab Journal)**:
+- Goal: "Scientific Pop-Up" Diorama Photography
+- Object: A massive, antique Leather-Bound Journal
+- Pose: The book stands upright, opened at a strict 90-degree angle (L-Shape)
+- Vertical Page: Acts as the blackboard/diagram wall
+- Horizontal Page: Acts as the laboratory floor
+
+**Sculpture (The Paper Theory)**:
+- Construction: The "Model" rises vertically from the center gutter of the book
+- Material: The model is constructed entirely from Strips of the Book's Own Paper
+- Detail: The paper strips are twisted, folded, and connected to form the structure (e.g., the twisting ladder of the DNA)
+- Highlight: Subtle use of Colored Ink or Pencil (Red, Blue, Yellow) on the paper model to distinguish parts (e.g., base pairs or atoms)
+
+**Narrative Scale (The Scientists)**:
+- Figures: 1:35 Scale Miniature Figures of the "Researchers" stand on the horizontal page
+- Attire: Period-accurate clothing (e.g., 1950s Lab Coats, Victorian Suits, Renaissance Robes)
+- The Action: They are interacting with the giant Paper Model—pointing, measuring with tiny tools, or holding miniature clipboards
+
+**Visual**:
+- Background: The vertical page behind the model is covered in Hand-Drawn Ink Illustrations and diagrams relevant to the discovery
+- Title: Handwritten text at the top of the page: "The Discovery of [Input]"
+- Foreground: The floor page is scattered with scribbled notes, formulas, and signatures
+
+**Output**:
+- ONE image, 1:1 Aspect Ratio
+- Macro Photography, "Academic History" aesthetic
+- High Texture Fidelity`
+};
+
 /**
  * 可用的模板标签
  */
@@ -1572,7 +1862,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
     author: "@berryxia（Berryxia.AI）",
     selections: {},
     tags: ["人物", "创意", "图表"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_photo_grid",
@@ -1602,7 +1894,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "lens_param-8": { cn: "85mm, f/2.2", en: "85mm, f/2.2" }
     },
     tags: ["人物", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_fashion",
@@ -1612,7 +1906,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
     author: "@tanshilong（MarioTan）",
     selections: {},
     tags: ["人物", "创意", "卡通"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_character_selfie",
@@ -1622,7 +1918,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
     author: "@tanshilong（MarioTan）",
     selections: {},
     tags: ["人物", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_classic_scene",
@@ -1636,7 +1934,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "position": { cn: "顶部中央", en: "Top Center" }
     },
     tags: ["卡通", "创意", "游戏"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_corporate_growth",
@@ -1650,7 +1950,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["建筑", "创意", "图表"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_fisheye_urban",
@@ -1677,7 +1979,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "render_style": { cn: "高质量的 2D 插画风格", en: "High-quality 2D illustration style" }
     },
     tags: ["摄影", "创意", "人物"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_detective_social",
@@ -1691,7 +1995,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "9:16竖构图", en: "9:16 Vertical" }
     },
     tags: ["创意", "人物", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_magazine_cover",
@@ -1708,7 +2014,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "9:16竖构图", en: "9:16 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_manga_reality",
@@ -1722,7 +2030,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "9:16竖构图", en: "9:16 Vertical" }
     },
     tags: ["人物", "创意", "卡通"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_industrial_design",
@@ -1741,7 +2051,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["产品", "创意", "图表"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_photo_grid_v2",
@@ -1771,7 +2083,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "lens_param-8": { cn: "85mm, f/2.2", en: "85mm, f/2.2" }
     },
     tags: ["人物", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_raindrop_art",
@@ -1784,7 +2098,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_art_growth",
@@ -1798,7 +2114,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["建筑", "创意", "图表"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_miniature_desk",
@@ -1813,7 +2131,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "4:3横构图", en: "4:3 Horizontal" }
     },
     tags: ["摄影", "创意", "卡通"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_japanese_product_poster",
@@ -1826,7 +2146,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "16:9横构图", en: "16:9 Horizontal" }
     },
     tags: ["产品", "创意", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_luxury_editorial",
@@ -1842,7 +2164,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_pixar_deconstruction",
@@ -1857,7 +2181,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "16:9横构图", en: "16:9 Horizontal" }
     },
     tags: ["人物", "创意", "卡通", "图表"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_street_self_dialogue",
@@ -1873,7 +2199,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_wooden_art_xmas",
@@ -1886,7 +2214,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["产品", "创意", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_brand_concept_object",
@@ -1900,7 +2230,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "1:1", en: "1:1 Square" }
     },
     tags: ["产品", "创意", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_fashion_focus",
@@ -1918,7 +2250,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_city_glimpse",
@@ -1936,7 +2270,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "4:3横构图", en: "4:3 Horizontal" }
     },
     tags: ["建筑", "创意", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_multiple_selves_indoor",
@@ -1955,7 +2291,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_character_sheet_art",
@@ -1970,7 +2308,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "draw_style": { cn: "手绘漫画风格", en: "Hand-drawn Manga Style" }
     },
     tags: ["人物", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_underwater_caustics",
@@ -1986,7 +2326,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_daily_snapshot",
@@ -2006,7 +2348,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_surveillance_still",
@@ -2025,7 +2369,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_fine_art_garden",
@@ -2047,7 +2393,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "2:3竖构图", en: "2:3 Vertical" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_chinese_new_year_poster",
@@ -2063,7 +2411,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "2:3竖构图", en: "2:3 Vertical" }
     },
     tags: ["创意", "人物", "时尚", "节日"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_cute_dynamic_portrait",
@@ -2080,7 +2430,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "camera_angle": { cn: "极低角度虫视，床高度", en: "Extreme low-angle worm's-eye view, bed height" }
     },
     tags: ["人物", "摄影", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_fitness_selfie",
@@ -2100,7 +2452,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "3:4竖构图", en: "3:4 vertical portrait" }
     },
     tags: ["人物", "摄影", "卡通"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_miniature_model",
@@ -2114,7 +2468,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ratio": { cn: "16:9横构图", en: "16:9 horizontal landscape" }
     },
     tags: ["创意", "产品", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_pop_mart_plush",
@@ -2128,7 +2484,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "festive_archway": { cn: "中国传统拱门", en: "traditional Chinese archway" }
     },
     tags: ["卡通", "创意", "节日"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_3d_isometric_diorama",
@@ -2142,7 +2500,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "pod_structure": { cn: "玻璃立方体展台", en: "glass cube pod" }
     },
     tags: ["产品", "创意","建筑"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_chinese_bridal_portrait",
@@ -2156,7 +2516,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "bridal_jewelry": { cn: "白色珍珠首饰和小珍珠耳环", en: "white pearl jewelry and small pearl earrings" }
     },
     tags: ["人物", "摄影", "节日"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_premium_food_advertising",
@@ -2169,7 +2531,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "ingredient_bits": { cn: "可可粉和金箔碎屑", en: "cocoa powder and gold flakes" }
     },
     tags: ["产品", "摄影"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_forbidden_city_phoenix",
@@ -2184,7 +2548,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "festive_props": { cn: "口中叼着中式红包，手中拿着展开的春节祝福", en: "holding red envelope in mouth and unfolded spring festival blessing in hand" }
     },
     tags: ["人物", "摄影", "节日", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_interior_rendering",
@@ -2203,7 +2569,9 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "render_quality": { cn: "4K超高清分辨率", en: "4K Ultra HD resolution" }
     },
     tags: ["建筑", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
   },
   {
     id: "tpl_isometric_interior_scene",
@@ -2219,6 +2587,71 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "wall_material": { cn: "暖白色墙面与装饰画", en: "Warm white walls with decorative art" }
     },
     tags: ["建筑", "创意"],
-    language: ["cn", "en"]
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
+  },
+  {
+    id: "tpl_product_design_spec",
+    name: { cn: "产品设计规范图", en: "Product Design Specification" },
+    content: TEMPLATE_PRODUCT_DESIGN_SPEC,
+    imageUrl: "https://s3.bmp.ovh/2026/01/31/FNHtuBte.jpg",
+    author: "Ege (@egeberkina)",
+    selections: {
+      "product_category": { cn: "现代椅子", en: "Modern Chair" },
+      "environment_style": { cn: "极简建筑室内", en: "Minimal Architectural Interior" },
+      "lighting": { cn: "自然窗光", en: "Natural window light" },
+      "drawing_style": { cn: "建筑线图风格", en: "Architectural Line Drawing Style" }
+    },
+    tags: ["产品", "创意", "图表"],
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "optional_base_image"
+  },
+  {
+    id: "tpl_character_line_art",
+    name: { cn: "人物转手绘", en: "Character Line Art" },
+    content: TEMPLATE_CHARACTER_LINE_ART,
+    imageUrl: "https://s3.bmp.ovh/2026/01/31/GWQUDXpd.jpg",
+    author: "Vigo Zhao (@VigoCreativeAI)",
+    selections: {
+      "character_subject": { cn: "年轻女性，长发，微笑", en: "Young woman with long hair, smiling" },
+      "portrait_view": { cn: "正面肖像", en: "Front portrait" },
+      "line_art_style": { cn: "钢笔墨水风格", en: "Pen and ink style" },
+      "shading_technique": { cn: "极简排线阴影", en: "Minimalist cross-hatching" },
+      "background_treatment": { cn: "白色背景", en: "White background" }
+    },
+    tags: ["人物", "创意"],
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "recommend_base_image"
+  },
+  {
+    id: "tpl_classic_game_realism",
+    name: { cn: "经典游戏真实化", en: "Classic Game Realism" },
+    content: TEMPLATE_CLASSIC_GAME_REALISM,
+    imageUrl: "https://s3.bmp.ovh/2026/01/31/sQzIztAD.jpg",
+    author: "Michael Rabone (@michaelrabone)",
+    selections: {
+      "classic_game": { cn: "Donkey Kong (1981 街机游戏)", en: "Donkey Kong (1981 vintage arcade game)" }
+    },
+    tags: ["游戏", "创意", "摄影"],
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "no_base_image"
+  },
+  {
+    id: "tpl_science_paper_model",
+    name: { cn: "科学发现纸雕模型", en: "Scientific Discovery Paper Model" },
+    content: TEMPLATE_SCIENCE_PAPER_MODEL,
+    imageUrl: "https://s3.bmp.ovh/2026/01/31/gB4NpxYw.jpg",
+    author: "Gadgetify (@Gdgtify)",
+    selections: {
+      "scientific_discovery": { cn: "DNA结构", en: "The Structure of DNA" }
+    },
+    tags: ["创意", "图表", "摄影"],
+    language: ["cn", "en"],
+    bestModel: "Nano Banana Pro",
+    baseImage: "no_base_image"
   }
 ];

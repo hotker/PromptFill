@@ -677,7 +677,7 @@ export const BanksSidebar = React.memo(({
         style={!isMobile ? { ...globalContainerStyle, width: `${bankSidebarWidth}px` } : {}}
         className={`
             ${isMobile 
-              ? `fixed inset-y-0 right-0 z-[300] w-[85%] max-w-[360px] transform transition-transform duration-500 ease-out shadow-2xl ${isBanksDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`
+              ? `fixed top-20 bottom-32 right-4 z-[300] w-[85%] max-w-[360px] rounded-3xl transform transition-transform duration-500 ease-out shadow-2xl ${isBanksDrawerOpen ? 'translate-x-0' : 'translate-x-[120%]'}`
               : 'relative md:flex flex-col h-full shrink-[10] overflow-hidden min-w-[240px]'
             } 
             flex flex-col overflow-hidden
@@ -685,7 +685,7 @@ export const BanksSidebar = React.memo(({
             ${!isMobile && mobileTab !== 'editor' && mobileTab !== 'banks' ? 'hidden md:flex' : ''}
         `}
       >
-        <div className={`flex flex-col w-full h-full backdrop-blur-sm md:rounded-2xl ${isMobile ? (isDarkMode ? 'bg-[#242120]/95' : 'bg-white/95') : (isDarkMode ? 'bg-black/20' : 'bg-white/30')}`}>
+        <div className={`flex flex-col w-full h-full backdrop-blur-sm rounded-3xl md:rounded-2xl ${isMobile ? (isDarkMode ? 'bg-[#242120]/95' : 'bg-white/95') : (isDarkMode ? 'bg-black/20' : 'bg-white/30')}`}>
           <div 
               className="hidden md:flex absolute -left-2 top-0 bottom-0 w-4 cursor-col-resize z-40 group items-center justify-center"
               onMouseDown={startResizing}

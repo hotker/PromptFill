@@ -11,7 +11,7 @@
 A **structured prompt generation tool** designed specifically for AI painting (GPT, Midjourney, Nano Banana, etc.). Help users quickly build, manage, and iterate complex prompts through a visual "fill-in-the-blank" interaction.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/Version-0.8.1-orange.svg)
+![Version](https://img.shields.io/badge/Version-0.8.2-orange.svg)
 ![Data](https://img.shields.io/badge/Data-0.8.7-green.svg)
 ![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)
 ![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg)
@@ -22,7 +22,7 @@ A **structured prompt generation tool** designed specifically for AI painting (G
 
 ## 📝 Foreword
 
-Prompt Fill is now at version **v0.8.1**. The original intention of this project is to solve the problem of hard-to-remember, hard-to-manage, and tedious modification of prompts in the AI painting process. By structuring prompts, creation becomes as simple as "filling in the blanks".
+Prompt Fill is now at version **v0.8.2**. The original intention of this project is to solve the problem of hard-to-remember, hard-to-manage, and tedious modification of prompts in the AI painting process. By structuring prompts, creation becomes as simple as "filling in the blanks".
 
 ### 🌟 Progress & Core Features
 
@@ -176,6 +176,13 @@ Copy the final prompt or save as a long image. JSON Import/Export is available f
 
 ## 📝 Change Log
 
+### Version 0.8.2 (2026-01-31)
+- Header Refactor: Progressive blur top bar with horizontal tag navigation for mobile.
+- Layout Redesign: Integrated drawer toggles in editor header for better spacing on mobile.
+- Copy Enhancement: Automatically include recommended platform when copying results.
+- UI Refinement: Removed icon backgrounds in settings for a cleaner look.
+- Credits Update: Fully updated the list of prompt inspiration contributors.
+
 ### Data Version 0.8.7 (2026-01-24)
 *   **🛠️ Data Correction**: Updated authors for specific prompt templates.
 
@@ -250,7 +257,7 @@ MIT License / [MIT 许可证](LICENSE).
 一个专为 AI 绘画（GPT、Nano Banana 等）设计的**结构化提示词生成工具**。通过可视化的"填空"交互方式，帮助用户快速构建、管理和迭代复杂的 Prompt。
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/Version-0.8.1-orange.svg)
+![Version](https://img.shields.io/badge/Version-0.8.2-orange.svg)
 ![Data](https://img.shields.io/badge/Data-0.8.7-green.svg)
 ![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)
 ![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg)
@@ -261,7 +268,7 @@ MIT License / [MIT 许可证](LICENSE).
 
 ## 📝 写在前面
 
-Prompt Fill 现已迭代至 **v0.8.1** 版本。本项目初衷是解决 AI 绘画过程中提示词难记忆、难管理、修改繁琐的问题。通过将 Prompt 结构化，让创作变得像"填空"一样简单。
+Prompt Fill 现已迭代至 **v0.8.2** 版本。本项目初衷是解决 AI 绘画过程中提示词难记忆、难管理、修改繁琐的问题。通过将 Prompt 结构化，让创作变得像"填空"一样简单。
 
 ### 🌟 目前进度与核心功能
 
@@ -414,6 +421,13 @@ Prompt Fill 现已迭代至 **v0.8.1** 版本。本项目初衷是解决 AI 绘�
 ---
 
 ## 📝 更新日志
+
+### Version 0.8.2 (2026-01-31)
+- 首页重构：引入渐进式毛玻璃顶部栏与无滚动条横向标签导航。
+- 布局重组：详情页集成模版与词库抽屉开关至顶栏，优化屏幕利用率。
+- 复制增强：复制提示词结果时，自动附带推荐的出图平台信息。
+- 视觉微调：去除设置界面图标底色，提升整体视觉通透感。
+- 鸣谢更新：完整补充了所有提示词灵感贡献作者。
 
 ### Data Version 0.8.7 (2026-01-24)
 *   **🛠️ 数据修正**：更新了部分提示词模板的作者信息。

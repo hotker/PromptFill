@@ -7,6 +7,63 @@ const API_BASE_URL =
   import.meta.env.VITE_SHARE_API_URL || 
   'https://data.tanshilong.com/api/share';
 
+const isTauriEnv = () => !!(window.__TAURI_INTERNALS__ || window.__TAURI_IPC__ || window.location.protocol === 'tauri:');
+
+const fetchJson = async (url, options = {}) => {
+  if (isTauriEnv()) {
+    try {
+      const { fetch } = await import('@tauri-apps/plugin-http');
+      const res = await fetch(url, { method: 'GET', ...options });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status} ${text ? `- ${text.slice(0, 120)}` : ''}`.trim());
+      }
+      return await res.json();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status} ${text ? `- ${text.slice(0, 120)}` : ''}`.trim());
+  }
+  return await res.json();
+};
+
+const fetchShareByCode = async (code) => {
+  const encoded = encodeURIComponent(code);
+  const directUrl = `${API_BASE_URL}/${encoded}`;
+  const proxyUrls = [
+    `https://r.jina.ai/http://${directUrl.replace(/^https?:\/\//, '')}`
+  ];
+
+  try {
+    const result = await fetchJson(directUrl);
+    if (!result?.data) throw new Error('missing data');
+    return result.data;
+  } catch (error) {
+    // 浏览器可能被 CORS 阻断，尝试文本代理
+    let lastError = `${error.message || error} (${directUrl})`;
+    for (const url of proxyUrls) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = await res.text();
+        const jsonStart = text.indexOf('{');
+        if (jsonStart === -1) throw new Error('missing JSON body');
+        const parsed = JSON.parse(text.slice(jsonStart));
+        if (!parsed?.data) throw new Error('missing data');
+        return parsed.data;
+      } catch (proxyError) {
+        lastError = `${proxyError.message || proxyError} (${url})`;
+      }
+    }
+    throw new Error(lastError || 'request failed');
+  }
+};
+
 /**
  * 分享功能 Hook
  * 提供模版分享、导入相关的功能
@@ -50,6 +107,8 @@ export const useShareFunctions = (
   const [isGenerating, setIsGenerating] = useState(false); // 新增：网络请求状态
   const [prefetchedShortCode, setPrefetchedShortCode] = useState(null); // 新增：预取的短码
   const [isPrefetching, setIsPrefetching] = useState(false); // 新增：是否正在后台取码
+  const [shareImportError, setShareImportError] = useState(null);
+  const [isImportingShare, setIsImportingShare] = useState(false);
 
   // 当模板改变时重置预取码
   useEffect(() => {
@@ -88,6 +147,7 @@ export const useShareFunctions = (
       }
 
       if (shareData) {
+        setIsImportingShare(true);
         // 如果输入的是完整的 URL，提取 share 参数部分
         if (shareData.includes('share=')) {
           try {
@@ -103,18 +163,21 @@ export const useShareFunctions = (
         // 如果 shareData 长度较短（比如 8 位），说明是短码，需要去后端请求
         if (shareData.length <= 15) {
           try {
-            const res = await fetch(`${API_BASE_URL}/${shareData}`);
-            const result = await res.json();
-            if (result.data) {
-              const decoded = decompressTemplate(result.data);
-              if (decoded) {
-                setSharedTemplateData(decoded);
-                setShowShareImportModal(true);
-              }
+            const payload = await fetchShareByCode(shareData);
+            const decoded = decompressTemplate(payload);
+            if (decoded) {
+              setSharedTemplateData(decoded);
+              setShowShareImportModal(true);
+            } else {
+              throw new Error('decode failed');
             }
           } catch (e) {
             console.warn("Short code fetch failed, might be legacy link:", e);
-            // 这里可以不报错，因为可能是无效的长链接片段
+            setShareImportError(
+              language === 'cn'
+                ? `短码解析失败：${e.message || e}`
+                : `Short code import failed: ${e.message || e}`
+            );
           }
         } else {
           // --- 原有长链解析逻辑 ---
@@ -122,12 +185,19 @@ export const useShareFunctions = (
           if (decoded && decoded.name && decoded.content) {
             setSharedTemplateData(decoded);
             setShowShareImportModal(true);
+          } else {
+            setShareImportError(
+              language === 'cn'
+                ? '分享链接解析失败'
+                : 'Failed to parse share link'
+            );
           }
         }
 
         // 清理 URL，避免刷新时重复触发
         const newUrl = window.location.origin + window.location.pathname + window.location.hash.split('?')[0];
         window.history.replaceState({}, document.title, newUrl);
+        setIsImportingShare(false);
       }
     };
 
@@ -175,6 +245,7 @@ export const useShareFunctions = (
   const handleManualTokenImport = useCallback(async (token) => {
     if (!token) return;
 
+    setIsImportingShare(true);
     let shareData = token.trim();
 
     // 识别是否是特殊的口令格式 #pf$token$
@@ -199,13 +270,16 @@ export const useShareFunctions = (
     // 如果是短码，去服务器换取完整数据
     if (shareData.length <= 15) {
       try {
-        const res = await fetch(`${API_BASE_URL}/${shareData}`);
-        const result = await res.json();
-        if (result.data) {
-          shareData = result.data;
-        }
+        shareData = await fetchShareByCode(shareData);
       } catch (e) {
         console.error("Short code import fetch failed:", e);
+        setShareImportError(
+          language === 'cn'
+            ? `短码解析失败：${e.message || e}`
+            : `Short code import failed: ${e.message || e}`
+        );
+        setIsImportingShare(false);
+        return;
       }
     }
 
@@ -214,8 +288,13 @@ export const useShareFunctions = (
       setSharedTemplateData(decoded);
       setShowShareImportModal(true);
     } else {
-      alert(language === 'cn' ? '无效的分享口令或链接' : 'Invalid share token or link');
+      setShareImportError(
+        language === 'cn'
+          ? '无效的分享口令或链接'
+          : 'Invalid share token or link'
+      );
     }
+    setIsImportingShare(false);
   }, [language]);
 
   /**
@@ -509,5 +588,8 @@ export const useShareFunctions = (
     doCopyShareLink,
     handleShareToken,
     getShortCodeFromServer,
+    shareImportError,
+    setShareImportError,
+    isImportingShare,
   };
 };

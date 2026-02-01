@@ -22,7 +22,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_photo_grid",
@@ -121,7 +123,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_fashion",
@@ -144,7 +148,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_character_selfie",
@@ -166,7 +172,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_classic_scene",
@@ -202,7 +210,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_corporate_growth",
@@ -238,7 +248,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_fisheye_urban",
@@ -326,7 +338,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_detective_social",
@@ -362,7 +376,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_magazine_cover",
@@ -398,7 +414,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_manga_reality",
@@ -434,7 +452,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_industrial_design",
@@ -475,7 +495,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_photo_grid_v2",
@@ -574,7 +596,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_raindrop_art",
@@ -605,7 +629,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_art_growth",
@@ -641,7 +667,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_miniature_desk",
@@ -681,7 +709,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_japanese_product_poster",
@@ -713,7 +743,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_luxury_editorial",
@@ -757,7 +789,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_pixar_deconstruction",
@@ -798,7 +832,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_street_self_dialogue",
@@ -842,7 +878,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_wooden_art_xmas",
@@ -874,7 +912,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_brand_concept_object",
@@ -910,7 +950,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_fashion_focus",
@@ -950,7 +992,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_city_glimpse",
@@ -1002,7 +1046,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_multiple_selves_indoor",
@@ -1058,7 +1104,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_character_sheet_art",
@@ -1097,7 +1145,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_underwater_caustics",
@@ -1141,7 +1191,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_daily_snapshot",
@@ -1200,7 +1252,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_surveillance_still",
@@ -1256,7 +1310,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_fine_art_garden",
@@ -1324,7 +1380,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_chinese_new_year_poster",
@@ -1369,7 +1427,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_cute_dynamic_portrait",
@@ -1417,7 +1477,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_fitness_selfie",
@@ -1477,7 +1539,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_miniature_model",
@@ -1513,7 +1577,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_pop_mart_plush",
@@ -1549,7 +1615,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_3d_isometric_diorama",
@@ -1585,7 +1653,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_chinese_bridal_portrait",
@@ -1621,7 +1691,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_premium_food_advertising",
@@ -1652,7 +1724,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_forbidden_city_phoenix",
@@ -1693,7 +1767,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_interior_rendering",
@@ -1748,7 +1824,9 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
     },
     {
       "id": "tpl_isometric_interior_scene",
@@ -1791,7 +1869,156 @@
       "language": [
         "cn",
         "en"
-      ]
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
+    },
+    {
+      "id": "tpl_product_design_spec",
+      "name": {
+        "cn": "产品设计规范图",
+        "en": "Product Design Specification"
+      },
+      "content": {
+        "cn": "### 产品设计规范图\n\n**布局**: 垂直 3:4 画布，暖色调中性纸张背景\n\n**上半部分 - 生活方式产品图**:\n\n一个 {{product_category}}，放置在 {{environment_style}} 中。\n\n**环境细节**:\n- {{lighting}}，柔和但高对比度的阴影\n- 微妙的混凝土或石材地面\n- 有纹理的石膏墙背景\n- 周围留有大量留白\n\n**渲染风格**:\n- 编辑式生活方式摄影\n- 高真实感\n- 暖色、柔和、高端的色调分级\n\n**下半部分 - 技术规格面板**:\n\n**技术绘图** (左侧和中部):\n- {{drawing_style}}\n- 正视图、侧视图、四分之三剖面图\n- 正交投影\n- 柔和的红色或深棕色细技术线\n- 最小的编辑式测量标注\n\n**材料面板** (右侧):\n- 3-4 个符合产品调性的材质样本\n- 方形或矩形样品\n- 小型编辑式说明标签\n- 技术但精致的语调\n\n**排版风格**:\n- 最小编辑式\n- 微妙的说明文字，无大标题\n- 柔和黑色或深棕色\n\n**整体美学**:\n- 设计目录 / 产品设计期刊氛围\n- 建筑感、高端、宁静\n- 避免杂乱、鲜艳颜色、重度品牌化、过度装饰的图形\n\n**约束**:\n- 不改变产品设计\n- 不发明新材料\n- 除非参考图中有，否则不添加徽标\n- 绘图中不使用透视扭曲",
+        "en": "### Product Design Specification\n\n**Layout**: Vertical 3:4 canvas, warm neutral paper background\n\n**Top Section - Lifestyle Product Image**:\n\nA {{product_category}} placed in {{environment_style}}.\n\n**Environment Details**:\n- {{lighting}}, soft but high-contrast shadows\n- Subtle concrete or stone flooring\n- Textured plaster wall background\n- Generous whitespace around product\n\n**Rendering Style**:\n- Editorial lifestyle photography\n- High realism\n- Warm, muted, premium color grading\n\n**Bottom Section - Technical Specification Panel**:\n\n**Technical Drawings** (bottom left and center):\n- {{drawing_style}}\n- Front view, side view, three-quarter cutaway view\n- Orthographic projection\n- Muted red or sepia fine technical lines\n- Minimal, editorial measurement callouts\n\n**Materials Panel** (bottom right):\n- 3-4 material swatches that match the product's aesthetic\n- Square or rectangular samples\n- Small editorial caption labels\n- Technical but refined tone\n\n**Typography**:\n- Minimal editorial\n- Subtle captions, no large headlines\n- Soft black or dark brown\n\n**Overall Aesthetic**:\n- Design catalog / product design journal mood\n- Architectural, premium, calm\n- Avoid clutter, bold colors, heavy branding, overly decorative graphics\n\n**Constraints**:\n- Do not change product design\n- Do not invent new materials\n- No logos unless present in reference\n- No perspective distortion in drawings"
+      },
+      "imageUrl": "https://s3.bmp.ovh/2026/01/31/FNHtuBte.jpg",
+      "author": "Ege (@egeberkina)",
+      "selections": {
+        "product_category": {
+          "cn": "现代椅子",
+          "en": "Modern Chair"
+        },
+        "environment_style": {
+          "cn": "极简建筑室内",
+          "en": "Minimal Architectural Interior"
+        },
+        "lighting": {
+          "cn": "自然窗光",
+          "en": "Natural window light"
+        },
+        "drawing_style": {
+          "cn": "建筑线图风格",
+          "en": "Architectural Line Drawing Style"
+        }
+      },
+      "tags": [
+        "产品",
+        "创意",
+        "图表"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "optional_base_image"
+    },
+    {
+      "id": "tpl_character_line_art",
+      "name": {
+        "cn": "人物转手绘",
+        "en": "Character Line Art"
+      },
+      "content": {
+        "cn": "### 人物转手绘插画\n\n将照片转换为黑白线稿插画，钢笔墨水绘制风格。\n\n**人物主体**: {{character_subject}}\n\n**画面视角**: {{portrait_view}}\n\n**艺术风格**:\n- {{line_art_style}}\n- 粗轮廓线，高对比度\n- 干净的线条，手绘外观\n- 图形小说美学\n\n**阴影技法**: {{shading_technique}}\n\n**背景处理**: {{background_treatment}}\n\n**整体效果**:\n- 单色素描\n- 黑白线稿插图\n- 漫画书风格肖像\n- 极简主义，强调轮廓",
+        "en": "### Convert to Character Line Art\n\nConvert to black and white line art illustration, pen and ink drawing style.\n\n**Character Subject**: {{character_subject}}\n\n**Portrait View**: {{portrait_view}}\n\n**Art Style**:\n- {{line_art_style}}\n- Bold outlines, high contrast\n- Clean linework, hand-drawn appearance\n- Graphic novel aesthetic\n\n**Shading Technique**: {{shading_technique}}\n\n**Background Treatment**: {{background_treatment}}\n\n**Overall Effect**:\n- Monochrome sketch\n- Black and white line art illustration\n- Comic book style portrait\n- Minimalist, emphasizing outlines"
+      },
+      "imageUrl": "https://s3.bmp.ovh/2026/01/31/ZezFIeeA.jpg",
+      "author": "Vigo Zhao (@VigoCreativeAI)",
+      "selections": {
+        "character_subject": {
+          "cn": "年轻女性，长发，微笑",
+          "en": "Young woman with long hair, smiling"
+        },
+        "portrait_view": {
+          "cn": "正面肖像",
+          "en": "Front portrait"
+        },
+        "line_art_style": {
+          "cn": "钢笔墨水风格",
+          "en": "Pen and ink style"
+        },
+        "shading_technique": {
+          "cn": "极简排线阴影",
+          "en": "Minimalist cross-hatching"
+        },
+        "background_treatment": {
+          "cn": "白色背景",
+          "en": "White background"
+        }
+      },
+      "tags": [
+        "人物",
+        "创意"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "recommend_base_image"
+    },
+    {
+      "id": "tpl_classic_game_realism",
+      "name": {
+        "cn": "经典游戏真实化",
+        "en": "Classic Game Realism"
+      },
+      "content": {
+        "cn": "### 经典游戏真实化\n\n以照片级真实感重新想象经典游戏世界。\n\n在一个图像中，以摄影方式可视化 {{classic_game}} 的角色、敌人和周围世界的真实模样。使图像尽可能保持与游戏的可识别性。\n\n**视觉要求**:\n- 照片级真实渲染\n- 8位/16位游戏美学的现实诠释\n- 标志性游戏元素的真实化呈现\n- 保持原始游戏色彩和氛围的参考\n\n**质量标准**:\n- 高细节，电影级照明\n- 真实材质和纹理\n- 游戏场景的精确重建",
+        "en": "### Classic Game Realism\n\nPhotorealistic reimagining of classic game worlds.\n\nIn one image, photographically visualize what the characters, enemies, and surrounding world of {{classic_game}} would look like if it was real. Make this image as recognisable to the game as possible.\n\n**Visual Requirements**:\n- Photorealistic rendering\n- Realistic interpretation of 8-bit/16-bit game aesthetics\n- Realistic presentation of iconic game elements\n- Reference to original game colors and atmosphere\n\n**Quality Standards**:\n- High detail, cinematic lighting\n- Realistic materials and textures\n- Accurate reconstruction of game scenes"
+      },
+      "imageUrl": "https://s3.bmp.ovh/2026/01/31/sQzIztAD.jpg",
+      "author": "Michael Rabone (@michaelrabone)",
+      "selections": {
+        "classic_game": {
+          "cn": "Donkey Kong (1981 街机游戏)",
+          "en": "Donkey Kong (1981 vintage arcade game)"
+        }
+      },
+      "tags": [
+        "游戏",
+        "创意",
+        "摄影"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "no_base_image"
+    },
+    {
+      "id": "tpl_science_paper_model",
+      "name": {
+        "cn": "科学发现纸雕模型",
+        "en": "Scientific Discovery Paper Model"
+      },
+      "content": {
+        "cn": "### 科学发现纸雕模型\n\n将重大科学发现解构为立体纸雕装置。\n\n**输入**: {{scientific_discovery}}\n\n**解构科学为3个叙事要素**:\n\n**模型（核心装置）**:\n- 识别代表理论的物理形状\n- 例如：DNA → 双螺旋结构 | 相对论 → 弯曲重力网格/球体 | 微生物 → 显微细胞 | 日心说 → 太阳系\n\n**研究者（角色）**:\n- 识别关键科学家\n- 例如：沃森、克里克 & 富兰克林 | 爱因斯坦 | 巴斯德 | 哥白尼\n\n**数据（图解）**:\n- 识别笔记的视觉语言\n- 例如：化学键、数学公式、生物草图、轨道路径\n\n**容器（实验日志）**:\n- 目标：\"科学立体\"模型摄影\n- 物体：一本巨大的古董皮革装订日志\n- 姿势：书本直立，以严格的90度角打开（L形）\n- 垂直页面：作为黑板/图解墙\n- 水平页面：作为实验室地板\n\n**雕塑（纸艺理论）**:\n- 构建：\"模型\"从书本中心装订处垂直升起\n- 材质：模型完全由书本自有的纸张条构成\n- 细节：纸条扭曲、折叠并连接形成结构（例如DNA的扭转梯形）\n- 高光：纸模型上微妙使用彩色墨水或铅笔（红、蓝、黄）以区分部分（例如碱基对或原子）\n\n**叙事比例（科学家）**:\n- 人物：\"研究者\"的1:35比例微型人物站在水平页面上\n- 服装：时代准确的服装（例如1950年代实验服、维多利亚西装、文艺复兴长袍）\n- 动作：他们正在与巨大的纸模型互动——指向、用微小工具测量或持有微型剪贴板\n\n**视觉效果**:\n- 背景：模型后方的垂直页面覆盖着手绘墨水插图和与发现相关的图表\n- 标题：页面顶部手写文本：\"[输入] 的发现\"\n- 前景：地面页面散布着涂写笔记、公式和签名\n\n**输出**:\n- 单张图像，1:1纵横比\n- 微距摄影，\"学术历史\"美学\n- 高纹理保真度",
+        "en": "### Scientific Discovery Paper Model\n\nDeconstruct major scientific discoveries into 3D paper sculpture installations.\n\n**Input**: {{scientific_discovery}}\n\n**Deconstruct the science into 3 Narrative Assets**:\n\n**Model (The Centerpiece)**:\n- Identify the physical shape that represents the theory\n- Examples: DNA → A Double Helix | Relativity → A Curved Gravity Grid/Sphere | Germs → A Microscopic Cell | Heliocentrism → The Solar System\n\n**Researchers (The Cast)**:\n- Identify the key scientists involved\n- Examples: Watson, Crick & Franklin | Einstein | Pasteur | Copernicus\n\n**Data (The Diagrams)**:\n- Identify the visual language of the notes\n- Examples: Chemical bonds, Mathematical formulas, Biological sketches, Orbital paths\n\n**Container (The Lab Journal)**:\n- Goal: \"Scientific Pop-Up\" Diorama Photography\n- Object: A massive, antique Leather-Bound Journal\n- Pose: The book stands upright, opened at a strict 90-degree angle (L-Shape)\n- Vertical Page: Acts as the blackboard/diagram wall\n- Horizontal Page: Acts as the laboratory floor\n\n**Sculpture (The Paper Theory)**:\n- Construction: The \"Model\" rises vertically from the center gutter of the book\n- Material: The model is constructed entirely from Strips of the Book's Own Paper\n- Detail: The paper strips are twisted, folded, and connected to form the structure (e.g., the twisting ladder of the DNA)\n- Highlight: Subtle use of Colored Ink or Pencil (Red, Blue, Yellow) on the paper model to distinguish parts (e.g., base pairs or atoms)\n\n**Narrative Scale (The Scientists)**:\n- Figures: 1:35 Scale Miniature Figures of the \"Researchers\" stand on the horizontal page\n- Attire: Period-accurate clothing (e.g., 1950s Lab Coats, Victorian Suits, Renaissance Robes)\n- The Action: They are interacting with the giant Paper Model—pointing, measuring with tiny tools, or holding miniature clipboards\n\n**Visual**:\n- Background: The vertical page behind the model is covered in Hand-Drawn Ink Illustrations and diagrams relevant to the discovery\n- Title: Handwritten text at the top of the page: \"The Discovery of [Input]\"\n- Foreground: The floor page is scattered with scribbled notes, formulas, and signatures\n\n**Output**:\n- ONE image, 1:1 Aspect Ratio\n- Macro Photography, \"Academic History\" aesthetic\n- High Texture Fidelity"
+      },
+      "imageUrl": "https://placehold.co/600x400/png?text=Science+Paper+Model",
+      "author": "Gadgetify (@Gdgtify)",
+      "selections": {
+        "scientific_discovery": {
+          "cn": "DNA结构",
+          "en": "The Structure of DNA"
+        }
+      },
+      "tags": [
+        "创意",
+        "图表",
+        "摄影"
+      ],
+      "language": [
+        "cn",
+        "en"
+      ],
+      "bestModel": "Nano Banana Pro",
+      "baseImage": "no_base_image"
     }
   ]
 }

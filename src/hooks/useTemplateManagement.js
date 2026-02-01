@@ -30,6 +30,10 @@ export const useTemplateManagement = (
   setEditingTemplateNameId,
   setTempTemplateName,
   setTempTemplateAuthor,
+  tempTemplateBestModel,
+  setTempTemplateBestModel,
+  tempTemplateBaseImage,
+  setTempTemplateBaseImage,
   language,
   isMobileDevice,
   setMobileTab,
@@ -47,7 +51,9 @@ export const useTemplateManagement = (
       author: newAuthor,
       content: t('new_template_content'),
       selections: {},
-      tags: []
+      tags: [],
+      bestModel: "Nano Banana Pro",
+      baseImage: "optional_base_image"
     };
     setTemplates(prev => [...prev, newTemplate]);
     setActiveTemplateId(newId);
@@ -57,6 +63,8 @@ export const useTemplateManagement = (
     setEditingTemplateNameId(newId);
     setTempTemplateName(newName);
     setTempTemplateAuthor(newAuthor);
+    setTempTemplateBestModel("Nano Banana Pro");
+    setTempTemplateBaseImage("optional_base_image");
 
     // 在移动端自动切换到编辑Tab
     if (isMobileDevice) {
@@ -85,7 +93,9 @@ export const useTemplateManagement = (
       id: newId,
       name: duplicateName(t_item.name),
       author: isSystemTemplate ? "PromptFill User" : (t_item.author || "PromptFill User"),
-      selections: { ...t_item.selections }
+      selections: { ...t_item.selections },
+      bestModel: t_item.bestModel || "Nano Banana Pro",
+      baseImage: t_item.baseImage || "optional_base_image"
     };
     setTemplates(prev => [...prev, newTemplate]);
     setActiveTemplateId(newId);
@@ -96,13 +106,14 @@ export const useTemplateManagement = (
   }, [INITIAL_TEMPLATES_CONFIG, setTemplates, setActiveTemplateId, isMobileDevice, setMobileTab, t]);
 
   // 删除模板
-  const handleDeleteTemplate = useCallback((id, e) => {
-    e.stopPropagation();
+  const handleDeleteTemplate = useCallback((id, e, options = {}) => {
+    if (e) e.stopPropagation();
     if (templates.length <= 1) {
       alert(t('alert_keep_one'));
       return;
     }
-    if (window.confirm(t('confirm_delete_template'))) {
+    const { skipConfirm = false } = options;
+    if (skipConfirm || window.confirm(t('confirm_delete_template'))) {
       const newTemplates = templates.filter(t => t.id !== id);
       setTemplates(newTemplates);
       if (activeTemplateId === id) {
@@ -112,9 +123,10 @@ export const useTemplateManagement = (
   }, [templates, activeTemplateId, setTemplates, setActiveTemplateId, t]);
 
   // 重置模板
-  const handleResetTemplate = useCallback((id, e) => {
-    e.stopPropagation();
-    if (!window.confirm(t('confirm_reset_template'))) return;
+  const handleResetTemplate = useCallback((id, e, options = {}) => {
+    if (e) e.stopPropagation();
+    const { skipConfirm = false } = options;
+    if (!skipConfirm && !window.confirm(t('confirm_reset_template'))) return;
 
     const original = INITIAL_TEMPLATES_CONFIG.find(t => t.id === id);
     if (!original) return;
@@ -131,7 +143,9 @@ export const useTemplateManagement = (
     setEditingTemplateNameId(t_item.id);
     setTempTemplateName(typeof t_item.name === 'string' ? t_item.name : t_item.name[language]);
     setTempTemplateAuthor(t_item.author || "");
-  }, [setIsEditing, setEditingTemplateNameId, setTempTemplateName, setTempTemplateAuthor, language]);
+    setTempTemplateBestModel(t_item.bestModel || "Nano Banana Pro");
+    setTempTemplateBaseImage(t_item.baseImage || "optional_base_image");
+  }, [setIsEditing, setEditingTemplateNameId, setTempTemplateName, setTempTemplateAuthor, setTempTemplateBestModel, setTempTemplateBaseImage, language]);
 
   // 开始编辑
   const handleStartEditing = useCallback(() => {
@@ -140,8 +154,10 @@ export const useTemplateManagement = (
     if (activeTemplate) {
       setTempTemplateName(typeof activeTemplate.name === 'string' ? activeTemplate.name : activeTemplate.name[language]);
       setTempTemplateAuthor(activeTemplate.author || "");
+      setTempTemplateBestModel(activeTemplate.bestModel || "Nano Banana Pro");
+      setTempTemplateBaseImage(activeTemplate.baseImage || "optional_base_image");
     }
-  }, [setIsEditing, activeTemplate, setTempTemplateName, setTempTemplateAuthor, language]);
+  }, [setIsEditing, activeTemplate, setTempTemplateName, setTempTemplateAuthor, setTempTemplateBestModel, setTempTemplateBaseImage, language]);
 
   // 停止编辑
   const handleStopEditing = useCallback(() => {
@@ -150,14 +166,20 @@ export const useTemplateManagement = (
   }, [setIsEditing, setEditingTemplateNameId]);
 
   // 保存模板名称
-  const saveTemplateName = useCallback((editingTemplateNameId, tempTemplateName, tempTemplateAuthor) => {
+  const saveTemplateName = useCallback((editingTemplateNameId, tempTemplateName, tempTemplateAuthor, tempTemplateBestModel, tempTemplateBaseImage) => {
     if (editingTemplateNameId && tempTemplateName && tempTemplateName.trim()) {
       setTemplates(prev => prev.map(t_item => {
         if (t_item.id === editingTemplateNameId) {
           const newName = typeof t_item.name === 'object'
             ? { ...t_item.name, [language]: tempTemplateName }
             : tempTemplateName;
-          return { ...t_item, name: newName, author: tempTemplateAuthor };
+          return { 
+            ...t_item, 
+            name: newName, 
+            author: tempTemplateAuthor,
+            bestModel: tempTemplateBestModel || t_item.bestModel || "Nano Banana Pro",
+            baseImage: tempTemplateBaseImage || t_item.baseImage || "optional_base_image"
+          };
         }
         return t_item;
       }));

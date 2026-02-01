@@ -17,6 +17,7 @@ export default defineConfig({
     port: 1420,
     strictPort: true,
     host: true, // 保持原本的 --host 功能
+    allowedHosts: ['tanshilongdeimac.local'],
   },
   // 设置环境变量的前缀，这样在 Tauri 中可以访问它们
   envPrefix: ['VITE_', 'TAURI_'],

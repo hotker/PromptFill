@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  Globe, Database, Download, Upload, 
-  Trash2, Mail, MessageCircle, Github, 
-  ChevronRight, RefreshCw, FolderOpen, X, Heart
+import {
+  Globe, Database, Download, Upload,
+  Trash2, Mail, MessageCircle, Github,
+  ChevronRight, RefreshCw, FolderOpen, X, Heart,
+  Cloud
 } from 'lucide-react';
 
 export const SettingsView = ({ 
@@ -16,11 +17,27 @@ export const SettingsView = ({
   globalContainerStyle,
   isDarkMode,
   themeMode,
-  setThemeMode
+  setThemeMode,
+  iCloudEnabled,
+  setICloudEnabled,
+  lastICloudSyncAt,
+  lastICloudSyncError
 }) => {
   const [showWechatQR, setShowWechatQR] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
   const [storageStats, setStorageStats] = React.useState(null);
+
+  const isTauriMobile = !!(window.__TAURI_INTERNALS__ && /iPhone|iPad|iPod/i.test(navigator.userAgent));
+  const iCloudStatusLabel = () => {
+    if (lastICloudSyncError) return language === 'cn' ? '同步失败' : 'Failed';
+    if (!iCloudEnabled) return language === 'cn' ? '已关闭' : 'OFF';
+    if (!lastICloudSyncAt) return language === 'cn' ? '等待同步' : 'Pending';
+    const time = new Date(lastICloudSyncAt).toLocaleString();
+    return language === 'cn' ? `上次同步: ${time}` : `Last sync: ${time}`;
+  };
+  const iCloudDescription = lastICloudSyncError
+    ? (language === 'cn' ? `同步失败：${lastICloudSyncError}` : `Sync failed: ${lastICloudSyncError}`)
+    : (language === 'cn' ? '在多台 iOS 设备间同步数据' : 'Sync data across iOS devices');
 
   React.useEffect(() => {
     if (storageMode === 'browser' && navigator.storage && navigator.storage.estimate) {
@@ -36,13 +53,27 @@ export const SettingsView = ({
   
   const updateLogs = language === 'cn' ? [
     { 
+      version: 'V0.8.2', 
+      date: '2026年1月31日', 
+      time: '11:50 PM',
+      title: '移动端 UI 深度优化与鸣谢更新',
+      type: 'MAJOR',
+      content: [
+        '首页重构：引入渐进式毛玻璃顶部栏与无滚动条横向标签导航。',
+        '布局重组：详情页集成模版与词库抽屉开关至顶栏，优化屏幕利用率。',
+        '复制增强：复制提示词结果时，自动附带推荐的出图平台信息。',
+        '视觉微调：去除设置界面图标底色，提升整体视觉通透感。',
+        '鸣谢更新：完整补充了所有提示词灵感贡献作者。'
+      ]
+    },
+    { 
       version: 'Data V0.8.7', 
       date: '2026年1月24日', 
       time: '01:02 AM',
       title: '提示词作者信息更正',
       type: 'UPDATE',
       content: [
-        '🛠️ 数据更正：修正了部分精选模版的作者标注信息。'
+        '数据更正：修正了部分精选模版的作者标注信息。'
       ]
     },
     { 
@@ -52,7 +83,7 @@ export const SettingsView = ({
       title: '自定义词条双语支持',
       type: 'UPDATE',
       content: [
-        '✨ 自定义词条双语支持：现在可以在添加或修改自定义选项时，分别输入中文和英文内容。'
+        '自定义词条双语支持：现在可以在添加或修改自定义选项时，分别输入中文和英文内容。'
       ]
     },
     { 
@@ -62,8 +93,8 @@ export const SettingsView = ({
       title: '智能词条正式上线与多项功能增强',
       type: 'MAJOR',
       content: [
-        '✨ 智能词条正式版：AI 驱动的提示词自动生成与词库扩充功能正式上线。',
-        '📚 官方模版扩充：新增紫禁城雪夜、高端食品广告、中式新娘肖像等多款精美艺术模版。',
+        '智能词条正式版：AI 驱动的提示词自动生成与词库扩充功能正式上线。',
+        '官方模版扩充：新增紫禁城雪夜、高端食品广告、中式新娘肖像等多款精美艺术模版。',
         '🚀 性能与体验优化：优化了瀑布流加载性能与移动端交互细节，提升系统整体稳定性。'
       ]
     },
@@ -232,13 +263,27 @@ export const SettingsView = ({
     }
   ] : [
     { 
+      version: 'V0.8.2', 
+      date: 'Jan 31, 2026', 
+      time: '11:50 PM',
+      title: 'Mobile UI Deep Optimization',
+      type: 'MAJOR',
+      content: [
+        'Header Refactor: Progressive blur top bar with horizontal tag navigation.',
+        'Layout Redesign: Integrated drawer toggles in editor header for better spacing.',
+        'Copy Enhancement: Automatically include recommended platform when copying results.',
+        'UI Refinement: Removed icon backgrounds in settings for a cleaner look.',
+        'Credits Update: Fully updated the list of prompt inspiration contributors.'
+      ]
+    },
+    { 
       version: 'Data V0.8.7', 
       date: 'Jan 24, 2026', 
       time: '01:02 AM',
       title: 'Author Attribution Fix',
       type: 'UPDATE',
       content: [
-        '🛠️ Data Update: Corrected author information for specific featured templates.'
+        'Data Update: Corrected author information for specific featured templates.'
       ]
     },
     { 
@@ -248,7 +293,7 @@ export const SettingsView = ({
       title: 'Bilingual Support for Custom Terms',
       type: 'UPDATE',
       content: [
-        '✨ Bilingual Support: Separately input CN and EN content when adding or editing custom options.'
+        'Bilingual Support: Separately input CN and EN content when adding or editing custom options.'
       ]
     },
     { 
@@ -258,9 +303,9 @@ export const SettingsView = ({
       title: 'AI Official Launch & Feature Enhancements',
       type: 'MAJOR',
       content: [
-        '✨ AI Terms Official: AI-powered prompt generation and library expansion are now officially live.',
-        '📚 Library Expansion: Added new high-quality templates including Forbidden City Snow, Premium Food Ad, and more.',
-        '🚀 UX & Performance: Optimized masonry layout loading and refined mobile interactions for better stability.'
+        'AI Terms Official: AI-powered prompt generation and library expansion are now officially live.',
+        'Library Expansion: Added new high-quality templates including Forbidden City Snow, Premium Food Ad, and more.',
+        'UX & Performance: Optimized masonry layout loading and refined mobile interactions for better stability.'
       ]
     },
     { 
@@ -477,7 +522,7 @@ export const SettingsView = ({
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <span className={`text-[9px] font-black tracking-[0.1em] uppercase ${isDarkMode ? 'text-gray-600' : 'text-gray-500'}`}>
-              System V0.8.1
+              System V0.8.2
             </span>
             <div className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'}`} />
             <span className="text-[9px] font-black text-orange-500/80 tracking-[0.1em] uppercase">
@@ -562,6 +607,17 @@ export const SettingsView = ({
                   active={storageMode === 'folder'}
                   onClick={handleSelectDirectory}
                 />
+                
+                {isTauriMobile && (
+                  <SettingItem 
+                    icon={Cloud} 
+                    label={language === 'cn' ? 'iCloud 同步' : 'iCloud Sync'} 
+                    description={iCloudDescription}
+                    value={iCloudStatusLabel()}
+                    active={iCloudEnabled}
+                    onClick={() => setICloudEnabled(!iCloudEnabled)}
+                  />
+                )}
               </div>
             </SettingSection>
 
@@ -580,7 +636,7 @@ export const SettingsView = ({
               </div>
               <SettingItem 
                 icon={Upload} 
-                label={language === 'cn' ? '全量导出' : 'Export All'} 
+                label={language === 'cn' ? '导出模版' : 'Export Templates'} 
                 onClick={handleExportAllTemplates} 
               />
               <SettingItem 
@@ -747,7 +803,7 @@ export const SettingsView = ({
                     : 'Special thanks to authors who provided prompt inspirations:'}
                   <br />
                   <span className={`font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-                    宝玉(@dotey), MarioTan(@tanshilong), sundyme, Berryxia.AI, sidona, AmirMushich, Latte(@0xbisc), 阿兹特克小羊驼(@AztecaAlpaca)
+                    宝玉(@dotey), MarioTan(@tanshilong), sundyme, Berryxia.AI, sidona, AmirMushich, Latte(@0xbisc), 阿兹特克小羊驼(@AztecaAlpaca), Keng哥(@langzihan), 虎小象(@hx831126), PlayForge AI(@94van.AI), underwood(@underwoodxie96), @YaseenK7212, Taaruk(@Taaruk_), M7(@mi7_crypto), @aleenaamiir, 两斤(@0x00_Krypt), ttmouse-豆爸(@ttmouse), Amira Zairi(@azed_ai), Ege(@egeberkina), Vigo Zhao(@VigoCreativeAI), Michael Rabone(@michaelrabone), Gadgetify(@Gdgtify)
                   </span>
                 </p>
                 

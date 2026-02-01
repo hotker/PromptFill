@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Variable } from './Variable';
 import { VisualEditor } from './VisualEditor';
 import { EditorToolbar } from './EditorToolbar';
@@ -46,6 +46,10 @@ export const TemplatePreview = React.memo(({
   setEditingTemplateNameId,
   tempTemplateAuthor,
   setTempTemplateAuthor,
+  tempTemplateBestModel,
+  setTempTemplateBestModel,
+  tempTemplateBaseImage,
+  setTempTemplateBaseImage,
   INITIAL_TEMPLATES_CONFIG,
   isDarkMode,
   // 编辑模式相关
@@ -65,10 +69,42 @@ export const TemplatePreview = React.memo(({
   handleShareLink, // 新增：分享处理函数
   // AI 相关（预留接口）
   onGenerateAITerms = null,  // AI 生成词条的回调函数
+  updateTemplateProperty, // 新增：立即更新属性的函数
 }) => {
+  const [activeSelect, setActiveSelect] = React.useState(null); // 'bestModel' | 'baseImage' | null
+  const selectRef = useRef(null);
+
+  // 点击外部关闭下拉菜单
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setActiveSelect(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const [editImageIndex, setEditImageIndex] = React.useState(0);
   const previewShareIconRef = React.useRef(null);
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  // 颜色映射配置 - 参考词库 (CATEGORY_STYLES) 的专业配色，弃用灰色系
+  const MODEL_COLORS = {
+    'Nano Banana Pro': 'text-blue-600/90 dark:text-blue-400/90',
+    'Midjourney V7': 'text-violet-600/90 dark:text-violet-400/90',
+    'Zimage': 'text-emerald-600/90 dark:text-emerald-400/90',
+  };
+
+  const BASE_IMAGE_COLORS = {
+    'no_base_image': 'text-teal-600/90 dark:text-teal-400/90',
+    'recommend_base_image': 'text-rose-600/90 dark:text-rose-400/90',
+    'optional_base_image': 'text-amber-600/90 dark:text-amber-400/90',
+  };
+
+  const AUTHOR_COLOR = activeTemplate.author === '官方' || !activeTemplate.author 
+    ? 'text-orange-600/90' 
+    : 'text-indigo-600/90 dark:text-indigo-400/90';
 
   // 统一的底层容器样式
   const unifiedStyle = isDarkMode ? {
@@ -123,6 +159,10 @@ export const TemplatePreview = React.memo(({
       setLanguage(templateLangs[0]);
     }
   }, [activeTemplate.id, templateLangs, language]);
+
+  const supportsChinese = templateLangs.includes('cn');
+  const supportsEnglish = templateLangs.includes('en');
+  const showLanguageToggle = templateLangs.length > 1;
 
   // 变量解析工具函数：从变量名中提取 baseKey 和 groupId
   const parseVariableName = (varName) => {
@@ -309,6 +349,26 @@ export const TemplatePreview = React.memo(({
                 id="preview-card"
                 className={`max-w-4xl mx-auto p-4 sm:p-6 md:p-8 lg:p-12 min-h-[500px] md:min-h-[600px] transition-all duration-500 relative ${isMobile ? (isDarkMode ? 'bg-[#242120]/90 border border-white/5 rounded-2xl shadow-2xl overflow-visible' : 'bg-white/90 border border-white/60 rounded-2xl shadow-xl overflow-visible') : (isDarkMode ? 'bg-black/20 backdrop-blur-md rounded-2xl border border-white/5 shadow-2xl' : 'bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm')}`}
             >
+                {/* 移动端模版内语言切换 */}
+                {isMobile && showLanguageToggle && (
+                  <div className="absolute top-4 right-4 z-30">
+                    <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} scale-75 origin-right shrink-0`}>
+                      <button
+                        onClick={() => supportsChinese && setLanguage('cn')}
+                        className={`premium-toggle-item ${isDarkMode ? 'dark' : 'light'} ${language === 'cn' ? 'is-active' : ''} !px-2`}
+                      >
+                        CN
+                      </button>
+                      <button
+                        onClick={() => supportsEnglish && setLanguage('en')}
+                        className={`premium-toggle-item ${isDarkMode ? 'dark' : 'light'} ${language === 'en' ? 'is-active' : ''} !px-2`}
+                      >
+                        EN
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* --- Top Section: Title & Image --- */}
                 {isEditing && (
                     <div className={`backdrop-blur-sm mb-6 rounded-xl overflow-hidden border ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-white/30 border-gray-100'}`}>
@@ -364,7 +424,75 @@ export const TemplatePreview = React.memo(({
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex gap-2 mt-2">
+                      <div className="flex gap-4 mt-1" ref={selectRef}>
+                        <div className="flex-1 flex flex-col gap-1.5 relative">
+                          <label className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {t('best_model')}
+                          </label>
+                          <button
+                            onClick={() => setActiveSelect(activeSelect === 'bestModel' ? null : 'bestModel')}
+                            className={`text-sm font-bold bg-transparent border-b border-dashed border-orange-500/30 hover:border-orange-500 transition-all w-full pb-1 text-left flex items-center justify-between ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                          >
+                            <span>{tempTemplateBestModel || t('please_select')}</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${activeSelect === 'bestModel' ? 'rotate-90' : ''}`} />
+                          </button>
+                          
+                          {activeSelect === 'bestModel' && (
+                            <div 
+                              className={`absolute top-full left-0 right-0 mt-2 z-[100] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border ${isDarkMode ? 'bg-[#2A2928] border-white/10' : 'bg-white border-gray-100'}`}
+                              style={{ backdropFilter: 'blur(20px)' }}
+                            >
+                              {['Nano Banana Pro', 'Midjourney V7', 'Zimage'].map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    updateTemplateProperty('bestModel', opt);
+                                    setActiveSelect(null);
+                                  }}
+                                  className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between ${tempTemplateBestModel === opt ? 'bg-orange-500/10 text-orange-500 font-bold' : (isDarkMode ? 'text-gray-400 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50')}`}
+                                >
+                                  {opt}
+                                  {tempTemplateBestModel === opt && <Check size={14} />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 flex flex-col gap-1.5 relative">
+                          <label className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {t('base_image')}
+                          </label>
+                          <button
+                            onClick={() => setActiveSelect(activeSelect === 'baseImage' ? null : 'baseImage')}
+                            className={`text-sm font-bold bg-transparent border-b border-dashed border-orange-500/30 hover:border-orange-500 transition-all w-full pb-1 text-left flex items-center justify-between ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                          >
+                            <span>{tempTemplateBaseImage ? t(tempTemplateBaseImage) : t('please_select')}</span>
+                            <ChevronRight size={14} className={`transition-transform duration-200 ${activeSelect === 'baseImage' ? 'rotate-90' : ''}`} />
+                          </button>
+
+                          {activeSelect === 'baseImage' && (
+                            <div 
+                              className={`absolute top-full left-0 right-0 mt-2 z-[100] rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border ${isDarkMode ? 'bg-[#2A2928] border-white/10' : 'bg-white border-gray-100'}`}
+                              style={{ backdropFilter: 'blur(20px)' }}
+                            >
+                              {['no_base_image', 'recommend_base_image', 'optional_base_image'].map((opt) => (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    updateTemplateProperty('baseImage', opt);
+                                    setActiveSelect(null);
+                                  }}
+                                  className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between ${tempTemplateBaseImage === opt ? 'bg-orange-500/10 text-orange-500 font-bold' : (isDarkMode ? 'text-gray-400 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50')}`}
+                                >
+                                  {t(opt)}
+                                  {tempTemplateBaseImage === opt && <Check size={14} />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2 mt-4">
                                     <button 
                                         onClick={saveTemplateName}
                                         className="px-4 py-2 bg-orange-500 text-white text-xs font-bold rounded-xl hover:bg-orange-600 transition-all flex items-center gap-2 shadow-lg shadow-orange-500/20"
@@ -404,15 +532,42 @@ export const TemplatePreview = React.memo(({
                             </div>
                         )}
 
-                        {/* Author Info Display (when not editing) */}
+                        {/* Meta Info: Author, Model, Base Image */}
                         {!isEditing && (
-                            <div className="flex flex-col gap-1 mt-1 mb-3">
-                                <p className={`text-sm font-black flex items-center gap-2 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
-                                    <span className="uppercase tracking-widest text-[10px] opacity-50">{language === 'cn' ? '作者' : 'Author'}:</span>
-                                    <span className={activeTemplate.author === '官方' || !activeTemplate.author ? 'text-orange-500' : 'text-orange-500/80'}>
+                            <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6 mt-1">
+                                {/* Author */}
+                                <div className="flex items-center gap-2">
+                                    <span className={`uppercase tracking-widest text-[10px] font-black opacity-40 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                        {language === 'cn' ? '作者' : 'Author'}:
+                                    </span>
+                                    <span className={`text-xs font-black ${AUTHOR_COLOR}`}>
                                         {activeTemplate.author === '官方' ? t('official') : (activeTemplate.author || t('official'))}
                                     </span>
-                                </p>
+                                </div>
+
+                                {/* Model */}
+                                {activeTemplate.bestModel && (
+                                    <div className="flex items-center gap-2">
+                                        <span className={`uppercase tracking-widest text-[10px] font-black opacity-40 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                            {t('best_model')}:
+                                        </span>
+                                        <span className={`text-xs font-black ${MODEL_COLORS[activeTemplate.bestModel] || 'text-gray-500'}`}>
+                                            {activeTemplate.bestModel}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {/* Base Image */}
+                                {activeTemplate.baseImage && (
+                                    <div className="flex items-center gap-2">
+                                        <span className={`uppercase tracking-widest text-[10px] font-black opacity-40 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                            {t('base_image')}:
+                                        </span>
+                                        <span className={`text-xs font-black ${BASE_IMAGE_COLORS[activeTemplate.baseImage] || 'text-gray-500'}`}>
+                                            {t(activeTemplate.baseImage)}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         )}
 

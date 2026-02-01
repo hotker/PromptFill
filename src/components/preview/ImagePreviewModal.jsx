@@ -171,7 +171,8 @@ const ImagePreviewModal = React.memo(({
           </div>
 
           <button
-              className={`absolute top-6 right-6 transition-colors p-2 rounded-full z-[150] ${isDarkMode ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-gray-900 hover:bg-black/5'}`}
+              className={`absolute right-6 transition-colors p-2 rounded-full z-[150] ${isDarkMode ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-gray-900 hover:bg-black/5'}`}
+              style={{ top: 'calc(1rem + env(safe-area-inset-top))' }}
               onClick={() => setZoomedImage(null)}
           >
               <X size={24} />

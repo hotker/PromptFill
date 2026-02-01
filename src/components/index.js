@@ -12,6 +12,7 @@ export { WaypointsIcon } from './icons/WaypointsIcon';
 export { TemplatesSidebar } from './TemplatesSidebar';
 export { BanksSidebar, InsertVariableModal, AddBankModal } from './BanksSidebar';
 export { DiscoveryView } from './DiscoveryView';
+export { TemplateCarousel } from './TemplateCarousel';
 export { MobileSettingsView } from './MobileSettingsView';
 export { SettingsView } from './SettingsView';
 export { Sidebar } from './Sidebar';

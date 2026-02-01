@@ -3001,6 +3001,513 @@
         }
       ]
     },
+    "product_category": {
+      "label": {
+        "cn": "产品类别",
+        "en": "Product Category"
+      },
+      "category": "item",
+      "options": [
+        {
+          "cn": "现代椅子",
+          "en": "Modern Chair"
+        },
+        {
+          "cn": "智能手表",
+          "en": "Smart Watch"
+        },
+        {
+          "cn": "高端耳机",
+          "en": "Premium Headphones"
+        },
+        {
+          "cn": "设计师台灯",
+          "en": "Designer Lamp"
+        },
+        {
+          "cn": "陶瓷器皿",
+          "en": "Ceramic Ware"
+        },
+        {
+          "cn": "玻璃花瓶",
+          "en": "Glass Vase"
+        },
+        {
+          "cn": "皮革包袋",
+          "en": "Leather Bag"
+        },
+        {
+          "cn": "便携音箱",
+          "en": "Portable Speaker"
+        }
+      ]
+    },
+    "environment_style": {
+      "label": {
+        "cn": "环境风格",
+        "en": "Environment Style"
+      },
+      "category": "location",
+      "options": [
+        {
+          "cn": "极简建筑室内",
+          "en": "Minimal Architectural Interior"
+        },
+        {
+          "cn": "现代工业空间",
+          "en": "Modern Industrial Space"
+        },
+        {
+          "cn": "北欧风格房间",
+          "en": "Nordic Style Room"
+        },
+        {
+          "cn": "现代主义画廊",
+          "en": "Modern Gallery"
+        },
+        {
+          "cn": "高端工作室",
+          "en": "Premium Studio"
+        },
+        {
+          "cn": "极简主义住宅",
+          "en": "Minimalist Residence"
+        },
+        {
+          "cn": "建筑摄影棚",
+          "en": "Architectural Studio"
+        },
+        {
+          "cn": "设计展廊",
+          "en": "Design Showcase"
+        }
+      ]
+    },
+    "primary_material": {
+      "label": {
+        "cn": "主要材质",
+        "en": "Primary Material"
+      },
+      "category": "item",
+      "options": [
+        {
+          "cn": "木材",
+          "en": "Wood"
+        },
+        {
+          "cn": "金属",
+          "en": "Metal"
+        },
+        {
+          "cn": "皮革",
+          "en": "Leather"
+        },
+        {
+          "cn": "玻璃",
+          "en": "Glass"
+        },
+        {
+          "cn": "塑料",
+          "en": "Plastic"
+        },
+        {
+          "cn": "织物",
+          "en": "Fabric"
+        },
+        {
+          "cn": "陶瓷",
+          "en": "Ceramic"
+        },
+        {
+          "cn": "石材",
+          "en": "Stone"
+        }
+      ]
+    },
+    "drawing_style": {
+      "label": {
+        "cn": "绘图风格",
+        "en": "Drawing Style"
+      },
+      "category": "visual",
+      "options": [
+        {
+          "cn": "建筑线图风格",
+          "en": "Architectural Line Drawing Style"
+        },
+        {
+          "cn": "技术正交绘图",
+          "en": "Technical Orthographic Drawing"
+        },
+        {
+          "cn": "工程制图风格",
+          "en": "Engineering Drawing Style"
+        },
+        {
+          "cn": "工业设计草图",
+          "en": "Industrial Design Sketch"
+        },
+        {
+          "cn": "建筑剖面图",
+          "en": "Architectural Section Drawing"
+        },
+        {
+          "cn": "产品技术图纸",
+          "en": "Product Technical Drawing"
+        }
+      ]
+    },
+    "character_subject": {
+      "label": {
+        "cn": "人物主体",
+        "en": "Character Subject"
+      },
+      "category": "character",
+      "options": [
+        {
+          "cn": "年轻女性，长发，微笑",
+          "en": "Young woman with long hair, smiling"
+        },
+        {
+          "cn": "成熟男性，短发，严肃表情",
+          "en": "Mature man with short hair, serious expression"
+        },
+        {
+          "cn": "青少年，活泼开朗",
+          "en": "Teenager, lively and cheerful"
+        },
+        {
+          "cn": "儿童，天真可爱",
+          "en": "Child, innocent and cute"
+        },
+        {
+          "cn": "老人，慈祥温和",
+          "en": "Elderly person, kind and gentle"
+        },
+        {
+          "cn": "时尚女性，精致妆容",
+          "en": "Fashionable woman with exquisite makeup"
+        },
+        {
+          "cn": "商务男士，西装革履",
+          "en": "Business man in suit and tie"
+        },
+        {
+          "cn": "运动型人物，充满活力",
+          "en": "Athletic person, full of energy"
+        }
+      ]
+    },
+    "portrait_view": {
+      "label": {
+        "cn": "画面视角",
+        "en": "Portrait View"
+      },
+      "category": "visual",
+      "options": [
+        {
+          "cn": "正面肖像",
+          "en": "Front portrait"
+        },
+        {
+          "cn": "侧面肖像",
+          "en": "Side profile portrait"
+        },
+        {
+          "cn": "半身像",
+          "en": "Half-body shot"
+        },
+        {
+          "cn": "全身像",
+          "en": "Full-body shot"
+        },
+        {
+          "cn": "四分之三侧面",
+          "en": "Three-quarter view"
+        },
+        {
+          "cn": "仰视角度",
+          "en": "Low-angle shot"
+        },
+        {
+          "cn": "俯视角度",
+          "en": "High-angle shot"
+        },
+        {
+          "cn": "特写头像",
+          "en": "Close-up headshot"
+        }
+      ]
+    },
+    "line_art_style": {
+      "label": {
+        "cn": "线稿风格",
+        "en": "Line Art Style"
+      },
+      "category": "visual",
+      "options": [
+        {
+          "cn": "钢笔墨水风格",
+          "en": "Pen and ink style"
+        },
+        {
+          "cn": "铅笔素描风格",
+          "en": "Pencil sketch style"
+        },
+        {
+          "cn": "炭笔粗犷风格",
+          "en": "Charcoal bold style"
+        },
+        {
+          "cn": "墨水笔绘风格",
+          "en": "Ink pen drawing style"
+        },
+        {
+          "cn": "漫画线条风格",
+          "en": "Manga line style"
+        },
+        {
+          "cn": "钢笔淡彩风格",
+          "en": "Pen and wash style"
+        },
+        {
+          "cn": "蚀刻版画风格",
+          "en": "Etching print style"
+        },
+        {
+          "cn": "钢笔速写风格",
+          "en": "Pen sketch style"
+        }
+      ]
+    },
+    "shading_technique": {
+      "label": {
+        "cn": "阴影技法",
+        "en": "Shading Technique"
+      },
+      "category": "visual",
+      "options": [
+        {
+          "cn": "极简排线阴影",
+          "en": "Minimalist cross-hatching"
+        },
+        {
+          "cn": "点画阴影",
+          "en": "Stippling shading"
+        },
+        {
+          "cn": "平涂阴影",
+          "en": "Flat shading"
+        },
+        {
+          "cn": "细致排线",
+          "en": "Detailed cross-hatching"
+        },
+        {
+          "cn": "粗线条阴影",
+          "en": "Bold line shading"
+        },
+        {
+          "cn": "渐变阴影",
+          "en": "Gradient shading"
+        },
+        {
+          "cn": "无阴影，纯轮廓",
+          "en": "No shading, outline only"
+        },
+        {
+          "cn": "漫画风格阴影",
+          "en": "Comic style shading"
+        }
+      ]
+    },
+    "background_treatment": {
+      "label": {
+        "cn": "背景处理",
+        "en": "Background Treatment"
+      },
+      "category": "location",
+      "options": [
+        {
+          "cn": "白色背景",
+          "en": "White background"
+        },
+        {
+          "cn": "浅灰背景",
+          "en": "Light gray background"
+        },
+        {
+          "cn": "简单几何背景",
+          "en": "Simple geometric background"
+        },
+        {
+          "cn": "抽象线条背景",
+          "en": "Abstract line background"
+        },
+        {
+          "cn": "漫画速度线",
+          "en": "Manga speed lines"
+        },
+        {
+          "cn": "点状纹理背景",
+          "en": "Dotted texture background"
+        },
+        {
+          "cn": "无背景，透明",
+          "en": "No background, transparent"
+        },
+        {
+          "cn": "深色背景",
+          "en": "Dark background"
+        }
+      ]
+    },
+    "classic_game": {
+      "label": {
+        "cn": "经典游戏",
+        "en": "Classic Game"
+      },
+      "category": "other",
+      "options": [
+        {
+          "cn": "Donkey Kong (1981 街机游戏)",
+          "en": "Donkey Kong (1981 vintage arcade game)"
+        },
+        {
+          "cn": "超级马里奥兄弟 (1985)",
+          "en": "Super Mario Bros (1985)"
+        },
+        {
+          "cn": "塞尔达传说 (1986)",
+          "en": "The Legend of Zelda (1986)"
+        },
+        {
+          "cn": "吃豆人 (1980 街机游戏)",
+          "en": "Pac-Man (1980 arcade game)"
+        },
+        {
+          "cn": "太空侵略者 (1978)",
+          "en": "Space Invaders (1978)"
+        },
+        {
+          "cn": "俄罗斯方块 (1984)",
+          "en": "Tetris (1984)"
+        },
+        {
+          "cn": "魂斗罗 (1987)",
+          "en": "Contra (1987)"
+        },
+        {
+          "cn": "街头霸王 II (1991)",
+          "en": "Street Fighter II (1991)"
+        },
+        {
+          "cn": "刺猬索尼克 (1991)",
+          "en": "Sonic the Hedgehog (1991)"
+        },
+        {
+          "cn": "恶魔城 (1986)",
+          "en": "Castlevania (1986)"
+        },
+        {
+          "cn": "洛克人 (1987)",
+          "en": "Mega Man (1987)"
+        },
+        {
+          "cn": "马里奥赛车 (1992)",
+          "en": "Mario Kart (1992)"
+        },
+        {
+          "cn": "口袋妖怪 红/蓝 (1996)",
+          "en": "Pokémon Red/Blue (1996)"
+        },
+        {
+          "cn": "星之卡比 (1992)",
+          "en": "Kirby's Dream Land (1992)"
+        },
+        {
+          "cn": " chrono trigger (1995)",
+          "en": "Chrono Trigger (1995)"
+        },
+        {
+          "cn": "最终幻想 VI (1994)",
+          "en": "Final Fantasy VI (1994)"
+        }
+      ]
+    },
+    "scientific_discovery": {
+      "label": {
+        "cn": "科学发现",
+        "en": "Scientific Discovery"
+      },
+      "category": "other",
+      "options": [
+        {
+          "cn": "DNA结构",
+          "en": "The Structure of DNA"
+        },
+        {
+          "cn": "相对论",
+          "en": "The Theory of Relativity"
+        },
+        {
+          "cn": "微生物理论",
+          "en": "The Germ Theory"
+        },
+        {
+          "cn": "日心说",
+          "en": "Heliocentrism"
+        },
+        {
+          "cn": "进化论",
+          "en": "The Theory of Evolution"
+        },
+        {
+          "cn": "万有引力",
+          "en": "The Law of Universal Gravitation"
+        },
+        {
+          "cn": "电磁理论",
+          "en": "Electromagnetic Theory"
+        },
+        {
+          "cn": "元素周期表",
+          "en": "The Periodic Table of Elements"
+        },
+        {
+          "cn": "量子力学",
+          "en": "Quantum Mechanics"
+        },
+        {
+          "cn": "原子结构",
+          "en": "The Atomic Structure"
+        },
+        {
+          "cn": "光的波动说",
+          "en": "The Wave Theory of Light"
+        },
+        {
+          "cn": "大陆漂移说",
+          "en": "Continental Drift"
+        },
+        {
+          "cn": "疫苗接种",
+          "en": "Vaccination"
+        },
+        {
+          "cn": "血液循环",
+          "en": "Blood Circulation"
+        },
+        {
+          "cn": "苯环结构",
+          "en": "The Structure of Benzene"
+        },
+        {
+          "cn": "双螺旋发现",
+          "en": "The Double Helix Discovery"
+        }
+      ]
+    },
     "cute_pose_dynamic": {
       "label": {
         "cn": "可爱动态姿势",
@@ -5046,6 +5553,46 @@
     "cute_pose_dynamic": {
       "cn": "向前走时回望，从正上方自信俏皮地俯视，迷人微笑",
       "en": "Walking forward while looking back, confidently and playfully looking down from directly above, charming smile"
+    },
+    "product_category": {
+      "cn": "现代椅子",
+      "en": "Modern Chair"
+    },
+    "environment_style": {
+      "cn": "极简建筑室内",
+      "en": "Minimal Architectural Interior"
+    },
+    "drawing_style": {
+      "cn": "建筑线图风格",
+      "en": "Architectural Line Drawing Style"
+    },
+    "character_subject": {
+      "cn": "年轻女性，长发，微笑",
+      "en": "Young woman with long hair, smiling"
+    },
+    "portrait_view": {
+      "cn": "正面肖像",
+      "en": "Front portrait"
+    },
+    "line_art_style": {
+      "cn": "钢笔墨水风格",
+      "en": "Pen and ink style"
+    },
+    "shading_technique": {
+      "cn": "极简排线阴影",
+      "en": "Minimalist cross-hatching"
+    },
+    "background_treatment": {
+      "cn": "白色背景",
+      "en": "White background"
+    },
+    "classic_game": {
+      "cn": "Donkey Kong (1981 街机游戏)",
+      "en": "Donkey Kong (1981 vintage arcade game)"
+    },
+    "scientific_discovery": {
+      "cn": "DNA结构",
+      "en": "The Structure of DNA"
     },
     "fitness_location": {
       "cn": "繁忙的健身房，镜子和器械随处可见",

@@ -65,7 +65,7 @@ export const TemplatesSidebar = React.memo(({
         style={!isMobile ? globalContainerStyle : {}}
         className={`
         ${isMobile 
-          ? `fixed inset-y-0 left-0 z-[300] w-[75%] max-w-[320px] transform transition-transform duration-500 ease-out shadow-2xl ${isTemplatesDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`
+          ? `fixed top-20 bottom-32 left-4 z-[300] w-[85%] max-w-[320px] rounded-3xl transform transition-transform duration-500 ease-out shadow-2xl ${isTemplatesDrawerOpen ? 'translate-x-0' : '-translate-x-[120%]'}`
           : 'relative md:flex flex-col shrink-[5] h-full w-[300px] overflow-hidden min-w-[200px]'
         } 
         flex overflow-hidden
@@ -73,7 +73,7 @@ export const TemplatesSidebar = React.memo(({
         ${!isMobile && mobileTab !== 'editor' && mobileTab !== 'banks' ? 'hidden md:flex' : ''}
       `}
       >
-        <div className={`flex flex-col w-full h-full ${isMobile ? (isDarkMode ? 'bg-[#242120]/95' : 'bg-white/95') : 'bg-transparent'} backdrop-blur-sm md:rounded-2xl`}>
+        <div className={`flex flex-col w-full h-full ${isMobile ? (isDarkMode ? 'bg-[#242120]/95' : 'bg-white/95') : 'bg-transparent'} backdrop-blur-sm rounded-3xl md:rounded-2xl`}>
           {/* --- Sidebar Header with Tools --- */}
       <div className="flex-shrink-0 px-6 pt-4 pb-4">
          <div className="flex items-center justify-between mb-6">

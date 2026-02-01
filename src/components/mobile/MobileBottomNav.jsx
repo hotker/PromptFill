@@ -48,8 +48,8 @@ const MobileBottomNav = ({
 
   // 设置按钮
   const handleSettingsClick = () => {
+    setDiscoveryView(false, { skipMobileTabSync: true });
     setMobileTab('settings');
-    setDiscoveryView(false);
     setZoomedImage(null);
     setIsTemplatesDrawerOpen(false);
     setIsBanksDrawerOpen(false);

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Eye, Edit3, Copy, Check, ImageIcon, Pencil, ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { Eye, Edit3, Copy, Check, ImageIcon, Pencil, ChevronLeft, ChevronRight, Plus, Trash2, LayoutGrid, Book } from 'lucide-react';
 import { WaypointsIcon } from './icons/WaypointsIcon';
 import { getLocalized } from '../utils/helpers';
 import { TemplatePreview } from './TemplatePreview';
@@ -60,6 +60,10 @@ export const TemplateEditor = React.memo(({
   setEditingTemplateNameId,
   tempTemplateAuthor,
   setTempTemplateAuthor,
+  tempTemplateBestModel,
+  setTempTemplateBestModel,
+  tempTemplateBaseImage,
+  setTempTemplateBaseImage,
 
   // ===== 标签编辑 =====
   handleUpdateTemplateTags,
@@ -96,7 +100,24 @@ export const TemplateEditor = React.memo(({
   onGenerateAITerms = null,  // AI 生成词条的回调函数
   onSmartSplitClick = null,  // 智能拆分的回调函数
   isSmartSplitLoading = false, // 智能拆分加载状态
+  updateTemplateProperty, // 新增：立即更新属性的函数
+  setIsTemplatesDrawerOpen,
+  setIsBanksDrawerOpen,
 }) => {
+  const [activeSelect, setActiveSelect] = React.useState(null); // 'bestModel' | 'baseImage' | null
+  const selectRef = useRef(null);
+
+  // 点击外部关闭下拉菜单
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setActiveSelect(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // 统一的容器样式
   const containerStyle = !isMobileDevice ? (isDarkMode ? {
     borderRadius: '16px',
@@ -145,13 +166,26 @@ export const TemplateEditor = React.memo(({
 
         {/* ===== 顶部工具栏 ===== */}
         {(!isMobileDevice || mobileTab !== 'settings') && (
-          <div className={`px-4 md:px-8 py-3 md:py-4 border-b flex flex-col gap-3 z-30 h-auto flex-shrink-0 pt-safe ${isDarkMode ? 'border-white/5' : 'border-gray-100/50'}`}>
-            {/* 第一行：标题、语言切换与模式切换 */}
-            <div className="w-full flex items-center justify-between gap-4 shrink-0">
-              <div className="flex items-center gap-3 overflow-hidden">
-                {/* Language Toggle - Mobile: Left of Title */}
-                {isMobileDevice && showLanguageToggle && (
-                  <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} scale-90 origin-left shrink-0`}>
+          <div className={`px-4 md:px-8 py-3 md:py-4 border-b flex flex-col gap-4 z-30 h-auto flex-shrink-0 pt-safe ${isDarkMode ? 'border-white/5' : 'border-gray-100/50'}`}>
+            {/* 第一行：模版开关、标题、词库开关 (Mobile) / 标题、语言 (Desktop) */}
+            <div className="w-full flex items-center justify-between gap-2 shrink-0">
+              {isMobileDevice && (
+                <button 
+                  onClick={() => setIsTemplatesDrawerOpen(true)}
+                  className={`p-2 transition-all active:scale-95 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                >
+                  <LayoutGrid size={22} />
+                </button>
+              )}
+
+              <div className="flex-1 flex items-center justify-center md:justify-start gap-3 overflow-hidden">
+                <h1 className={`text-base md:text-2xl font-black truncate tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {getLocalized(activeTemplate?.name, language)}
+                </h1>
+                
+                {/* 语言切换 - 桌面端显示在标题旁 */}
+                {!isMobileDevice && showLanguageToggle && (
+                  <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} shrink-0 scale-90`}>
                     <button
                       onClick={() => supportsChinese && setTemplateLanguage('cn')}
                       className={`premium-toggle-item ${isDarkMode ? 'dark' : 'light'} ${templateLanguage === 'cn' ? 'is-active' : ''} !px-2`}
@@ -166,50 +200,22 @@ export const TemplateEditor = React.memo(({
                     </button>
                   </div>
                 )}
-
-                {!isMobileDevice && (
-                  <h1 className={`text-xl md:text-2xl font-black truncate tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {getLocalized(activeTemplate?.name, language)}
-                  </h1>
-                )}
-
-                {/* Language Toggle - Desktop: Right of Title */}
-                {!isMobileDevice && showLanguageToggle && (
-                  <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} shrink-0`}>
-                    <button
-                      onClick={() => supportsChinese && setTemplateLanguage('cn')}
-                      disabled={!supportsChinese}
-                      className={`
-                        premium-toggle-item ${isDarkMode ? 'dark' : 'light'}
-                        ${!supportsChinese
-                          ? 'opacity-30 cursor-not-allowed'
-                          : templateLanguage === 'cn'
-                            ? 'is-active'
-                            : ''}
-                      `}
-                    >
-                      CN
-                    </button>
-                    <button
-                      onClick={() => supportsEnglish && setTemplateLanguage('en')}
-                      disabled={!supportsEnglish}
-                      className={`
-                        premium-toggle-item ${isDarkMode ? 'dark' : 'light'}
-                        ${!supportsEnglish
-                          ? 'opacity-30 cursor-not-allowed'
-                          : templateLanguage === 'en'
-                            ? 'is-active'
-                            : ''}
-                      `}
-                    >
-                      EN
-                    </button>
-                  </div>
-                )}
               </div>
 
-              {/* 模式切换 */}
-              <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} shrink-0`}>
+              {isMobileDevice && (
+                <button 
+                  onClick={() => setIsBanksDrawerOpen(true)}
+                  className={`p-2 transition-all active:scale-95 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}
+                >
+                  <Book size={22} />
+                </button>
+              )}
+            </div>
+
+            {/* 第二行：模式切换 (左侧)、操作按钮 (右侧) */}
+            <div className="w-full flex items-center justify-between gap-1.5 md:gap-3 shrink-0">
+              {/* 模式切换 (预览/编辑) */}
+              <div className={`premium-toggle-container ${isDarkMode ? 'dark' : 'light'} shrink-0 scale-90 md:scale-100 origin-left`}>
                 <button
                   onClick={handleStopEditing}
                   className={`premium-toggle-item ${isDarkMode ? 'dark' : 'light'} ${!isEditing ? 'is-active' : ''}`}
@@ -225,45 +231,45 @@ export const TemplateEditor = React.memo(({
                   <Edit3 size={14} /> <span className="hidden md:inline ml-1.5">{t('edit_mode')}</span>
                 </button>
               </div>
-            </div>
 
-            {/* 第二行：分享、保存、复制按钮 */}
-            <div className="w-full flex items-center justify-end gap-1.5 md:gap-3 shrink-0">
-              <PremiumButton
-                onClick={handleShareLink}
-                title={language === 'cn' ? '分享模版' : t('share_link')}
-                icon={WaypointsIcon}
-                isDarkMode={isDarkMode}
-                className="flex-none"
-              >
-                <span className="hidden md:inline ml-1.5">{language === 'cn' ? '分享模版' : t('share')}</span>
-              </PremiumButton>
+              {/* 右侧操作按钮组 */}
+              <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
+                <PremiumButton
+                  onClick={handleShareLink}
+                  title={language === 'cn' ? '分享' : t('share_link')}
+                  icon={WaypointsIcon}
+                  isDarkMode={isDarkMode}
+                  className="scale-90 md:scale-100 origin-right"
+                >
+                  <span className="hidden md:inline ml-1.5">{language === 'cn' ? '分享' : t('share')}</span>
+                </PremiumButton>
 
-              <PremiumButton
-                onClick={handleExportImage}
-                disabled={isEditing || isExporting}
-                title={isExporting ? t('exporting') : (language === 'cn' ? '导出长图' : t('export_image'))}
-                icon={ImageIcon}
-                isDarkMode={isDarkMode}
-                className="flex-none"
-              >
-                <span className="hidden md:inline ml-1.5 truncate">
-                  {isExporting ? (language === 'cn' ? '导出中...' : 'Exp...') : (language === 'cn' ? '导出长图' : 'Img')}
-                </span>
-              </PremiumButton>
+                <PremiumButton
+                  onClick={handleExportImage}
+                  disabled={isEditing || isExporting}
+                  title={isExporting ? t('exporting') : (language === 'cn' ? '导出' : t('export_image'))}
+                  icon={ImageIcon}
+                  isDarkMode={isDarkMode}
+                  className="scale-90 md:scale-100 origin-right"
+                >
+                  <span className="hidden md:inline ml-1.5 truncate">
+                    {isExporting ? (language === 'cn' ? '导出中...' : 'Exp...') : (language === 'cn' ? '导出长图' : 'Img')}
+                  </span>
+                </PremiumButton>
 
-              <PremiumButton
-                onClick={handleCopy}
-                title={copied ? t('copied') : (language === 'cn' ? '复制结果' : t('copy_result'))}
-                icon={copied ? Check : Copy}
-                active={true}
-                isDarkMode={isDarkMode}
-                className="flex-none"
-              >
-                <span className="hidden md:inline ml-1.5 truncate">
-                  {copied ? t('copied') : (language === 'cn' ? '复制结果' : 'Copy')}
-                </span>
-              </PremiumButton>
+                <PremiumButton
+                  onClick={handleCopy}
+                  title={copied ? t('copied') : (language === 'cn' ? '复制' : t('copy_result'))}
+                  icon={copied ? Check : Copy}
+                  active={true}
+                  isDarkMode={isDarkMode}
+                  className="scale-90 md:scale-100 origin-right"
+                >
+                  <span className="hidden md:inline ml-1.5 truncate">
+                    {copied ? t('copied') : (language === 'cn' ? '复制结果' : 'Copy')}
+                  </span>
+                </PremiumButton>
+              </div>
             </div>
           </div>
         )}
@@ -330,6 +336,77 @@ export const TemplateEditor = React.memo(({
                         <p className="text-[10px] text-orange-500/50 font-bold italic mt-1">
                           {language === 'cn' ? '* 系统模版作者不可修改' : '* System template author is read-only'}
                         </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Best Model & Base Image Suggestion */}
+                  <div className="flex gap-4" ref={selectRef}>
+                    <div className="flex-1 flex flex-col gap-1.5 relative">
+                      <label className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                        {t('best_model')}
+                      </label>
+                      <button
+                        onClick={() => setActiveSelect(activeSelect === 'bestModel' ? null : 'bestModel')}
+                        className={`text-sm font-bold bg-transparent border-b border-dashed border-orange-500/30 hover:border-orange-500 transition-all w-full pb-1 text-left flex items-center justify-between ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                      >
+                        <span>{tempTemplateBestModel || t('please_select')}</span>
+                        <ChevronRight size={14} className={`transition-transform duration-200 ${activeSelect === 'bestModel' ? 'rotate-90' : ''}`} />
+                      </button>
+                      
+                      {activeSelect === 'bestModel' && (
+                        <div 
+                          className={`absolute top-full left-0 right-0 mt-2 z-50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border ${isDarkMode ? 'bg-[#2A2928] border-white/10' : 'bg-white border-gray-100'}`}
+                          style={{ backdropFilter: 'blur(20px)' }}
+                        >
+                          {['Nano Banana Pro', 'Midjourney V7', 'Zimage'].map((opt) => (
+                            <button
+                              key={opt}
+                              onClick={() => {
+                                updateTemplateProperty('bestModel', opt);
+                                setActiveSelect(null);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between ${tempTemplateBestModel === opt ? 'bg-orange-500/10 text-orange-500 font-bold' : (isDarkMode ? 'text-gray-400 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50')}`}
+                            >
+                              {opt}
+                              {tempTemplateBestModel === opt && <Check size={14} />}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 flex flex-col gap-1.5 relative">
+                      <label className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                        {t('base_image')}
+                      </label>
+                      <button
+                        onClick={() => setActiveSelect(activeSelect === 'baseImage' ? null : 'baseImage')}
+                        className={`text-sm font-bold bg-transparent border-b border-dashed border-orange-500/30 hover:border-orange-500 transition-all w-full pb-1 text-left flex items-center justify-between ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                      >
+                        <span>{tempTemplateBaseImage ? t(tempTemplateBaseImage) : t('please_select')}</span>
+                        <ChevronRight size={14} className={`transition-transform duration-200 ${activeSelect === 'baseImage' ? 'rotate-90' : ''}`} />
+                      </button>
+
+                      {activeSelect === 'baseImage' && (
+                        <div 
+                          className={`absolute top-full left-0 right-0 mt-2 z-50 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border ${isDarkMode ? 'bg-[#2A2928] border-white/10' : 'bg-white border-gray-100'}`}
+                          style={{ backdropFilter: 'blur(20px)' }}
+                        >
+                          {['no_base_image', 'recommend_base_image', 'optional_base_image'].map((opt) => (
+                            <button
+                              key={opt}
+                              onClick={() => {
+                                updateTemplateProperty('baseImage', opt);
+                                setActiveSelect(null);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between ${tempTemplateBaseImage === opt ? 'bg-orange-500/10 text-orange-500 font-bold' : (isDarkMode ? 'text-gray-400 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50')}`}
+                            >
+                              {t(opt)}
+                              {tempTemplateBaseImage === opt && <Check size={14} />}
+                            </button>
+                          ))}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -423,6 +500,10 @@ export const TemplateEditor = React.memo(({
                     setEditingTemplateNameId={setEditingTemplateNameId}
                     tempTemplateAuthor={tempTemplateAuthor}
                     setTempTemplateAuthor={setTempTemplateAuthor}
+                    tempTemplateBestModel={tempTemplateBestModel}
+                    setTempTemplateBestModel={setTempTemplateBestModel}
+                    tempTemplateBaseImage={tempTemplateBaseImage}
+                    setTempTemplateBaseImage={setTempTemplateBaseImage}
                     INITIAL_TEMPLATES_CONFIG={INITIAL_TEMPLATES_CONFIG}
                     isDarkMode={isDarkMode}
                     isEditing={isEditing}
@@ -440,6 +521,7 @@ export const TemplateEditor = React.memo(({
                     templateLanguage={templateLanguage}
                     onGenerateAITerms={onGenerateAITerms}  // 传递 AI 生成回调
                     handleShareLink={handleShareLink} // 传递分享回调
+                    updateTemplateProperty={updateTemplateProperty}
                   />
                 </div>
 

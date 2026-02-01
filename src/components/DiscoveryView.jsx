@@ -6,6 +6,7 @@ import { getLocalized } from '../utils/helpers';
 import { Sidebar } from './Sidebar';
 import { TagSidebar } from './TagSidebar';
 import { FireworkEffect } from './FireworkEffect';
+import { TemplateCarousel } from './TemplateCarousel';
 import { FEATURE_FLAGS } from '../constants/featureFlags';
 import { TAG_LABELS } from '../constants/styles';
 
@@ -88,29 +89,72 @@ export const DiscoveryView = React.memo(({
     // ... 保持移动端逻辑不变
     return (
       <main
-        className={`fixed inset-0 z-10 flex flex-col overflow-y-auto pb-32 md:pb-20 ${isDarkMode ? 'dark-gradient-bg' : 'mesh-gradient-bg'}`}
+        className={`fixed inset-0 z-10 flex flex-col overflow-y-auto overflow-x-hidden pb-32 md:pb-20 ${isDarkMode ? 'dark-gradient-bg' : 'mesh-gradient-bg'}`}
       >
-        <div className="flex flex-col w-full min-h-full px-2 py-8 gap-6 pt-safe">
-          {/* 1. 顶部 SVG 标题区域 */}
-          <div className="w-full flex flex-col items-center px-4 gap-2">
-            <h1 className="sr-only">提示词填空器 (Prompt Fill) - 专业的 AI 提示词管理与优化工具</h1>
-            <img 
-              src={isDarkMode ? "/Title_Dark.svg" : "/Title.svg"} 
-              alt="提示词填空器 (Prompt Fill) - 专业的 AI 提示词管理与优化工具" 
-              className="w-full max-w-[220px] h-auto"
-            />
-            <p className={`text-[10px] opacity-70 text-center px-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              专业的 AI 提示词管理与优化工具，让提示词填充更高效
-            </p>
+        {/* 顶部固定毛玻璃导航栏 - 全局最上层 */}
+        <div className="fixed top-0 left-0 right-0 h-40 z-[100] pointer-events-none">
+          {/* 渐进式背景模糊层 */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: isDarkMode 
+                ? 'linear-gradient(180deg, rgba(24, 23, 22, 0.9) 0%, rgba(24, 23, 22, 0.5) 50%, rgba(24, 23, 22, 0) 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)',
+              backdropFilter: 'blur(30px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(30px) saturate(180%)',
+              maskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 50%, transparent 100%)'
+            }}
+          />
+          {/* 内容区域 - 标签选项 */}
+          <div className="relative pt-safe pointer-events-auto overflow-hidden">
+            <div className="flex overflow-x-auto no-scrollbar px-6 gap-6 scroll-smooth h-14 items-center">
+              <button
+                onClick={() => setSelectedTags("")}
+                className={`flex-shrink-0 text-[15px] font-bold transition-all duration-300 relative ${
+                  selectedTags === ""
+                    ? 'text-orange-500 scale-105'
+                    : (isDarkMode ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black')
+                }`}
+              >
+                {language === 'cn' ? '全部' : 'All'}
+                {selectedTags === "" && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full"></span>
+                )}
+              </button>
+              {TEMPLATE_TAGS.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTags(tag)}
+                  className={`flex-shrink-0 text-[15px] font-bold transition-all duration-300 relative ${
+                    selectedTags === tag
+                      ? 'text-orange-500 scale-105'
+                      : (isDarkMode ? 'text-white/70 hover:text-white' : 'text-black/70 hover:text-black')
+                  }`}
+                >
+                  {TAG_LABELS[language]?.[tag] || tag}
+                  {selectedTags === tag && (
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full"></span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
+        </div>
 
-          {/* 2. 动态文字区 */}
-          <div className="w-full scale-90 origin-center">
-            <AnimatedSlogan isActive={isSloganActive} language={language} isDarkMode={isDarkMode} />
-          </div>
+        {/* 轮播图区域 - 从顶部开始显示 */}
+        <div className="w-full">
+          <TemplateCarousel
+            templates={templates}
+            language={language}
+            isDarkMode={isDarkMode}
+            setZoomedImage={setZoomedImage}
+          />
+        </div>
 
-          {/* 3. 图像展示（两列瀑布流） */}
-          <section className="columns-2 gap-1 mt-2">
+        {/* 图像展示区域（两列瀑布流） */}
+        <div className="flex flex-col w-full px-2 py-4 gap-4">
+          <section className="columns-2 gap-1">
             {filteredTemplates.map(t_item => (
               <article
                 key={t_item.id}
@@ -126,9 +170,9 @@ export const DiscoveryView = React.memo(({
               >
                 <div className="relative w-full bg-gray-50/5">
                   {t_item.imageUrl ? (
-                    <img 
-                      src={t_item.imageUrl} 
-                      alt={getLocalized(t_item.name, language)} 
+                    <img
+                      src={t_item.imageUrl}
+                      alt={getLocalized(t_item.name, language)}
                       className="w-full h-auto block"
                       referrerPolicy="no-referrer"
                       loading="lazy"

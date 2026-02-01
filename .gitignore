@@ -43,6 +43,15 @@ App-clean.jsx
 重构完成-*.md
 测试用例-智能拆分.md
 PRD/
+# Data and Scripts
+prompt_fill_data.json
+update_templates_*.cjs
+start.bat
+start.command
+
+# Internal Docs
+release_checklist.md
+Prompt Template Skills.md
 
 # Tauri (Desktop App)
 src-tauri/
